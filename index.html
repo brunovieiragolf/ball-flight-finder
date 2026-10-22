@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ball Flight Finder · Bruno Vieira Golf</title>
+<meta name="description" content="What do your bad shots look like? Pick your miss and see the cause and the drill to fix it. By Bruno Vieira, PGA of Canada golf professional.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bruno Vieira Golf">
+<meta property="og:title" content="Ball Flight Finder">
+<meta property="og:description" content="What do your bad shots look like? Pick your miss and see the cause and the drill to fix it. By Bruno Vieira, PGA of Canada golf professional.">
+<meta property="og:url" content="https://bruno-ballflight.netlify.app/">
+<meta property="og:image" content="https://bruno-ballflight.netlify.app/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1F4E3D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231F4E3D'/%3E%3Cpath d='M32 54 Q24 26 46 12' stroke='%23E0482F' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='46' cy='12' r='5' fill='%23fff'/%3E%3C/svg%3E">
+<style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: phone-first range tool — flight picker grid on top, diagnosis + fault cards below */
+:root{
+  --bg:#F3F5F1; --surface:#FFFFFF; --ink:#18261F; --muted:#5B6B62; --line:#D7DED8;
+  --fair:#1F4E3D; --fair-soft:#E3EEE7; --flag:#E2B42B; --flag-ink:#4A3A05;
+  --sky:#DDECF4; --rough:#B9D7A2; --turf:#8CC274; --turf2:#76B15E; --golfer:#1C2A23;
+  --shot:#E0482F; --shot-soft:rgba(224,72,47,.22); --ideal:#FFFFFF; --dirt:#8A6A43;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1814; --surface:#17231D; --ink:#E6EEE8; --muted:#97A89E; --line:#2A3A32;
+  --fair:#7FC4A3; --fair-soft:#1D3229; --flag:#E9C24A; --flag-ink:#2A2004; --sky:#16283A; --rough:#1C3526; --turf:#2C5A3A; --turf2:#36703F; --golfer:#E6EEE8; --shot:#FF7457; --shot-soft:rgba(255,116,87,.25); --ideal:#C8D6CE; --dirt:#9C7A4E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1814; --surface:#17231D; --ink:#E6EEE8; --muted:#97A89E; --line:#2A3A32;
+  --fair:#7FC4A3; --fair-soft:#1D3229; --flag:#E9C24A; --flag-ink:#2A2004; --sky:#16283A; --rough:#1C3526; --turf:#2C5A3A; --turf2:#36703F; --golfer:#E6EEE8; --shot:#FF7457; --shot-soft:rgba(255,116,87,.25); --ideal:#C8D6CE; --dirt:#9C7A4E; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;padding:0 16px;padding-block:20px 48px}
+.wrap{max-width:760px;margin:0 auto;display:grid;gap:22px}
+header h1{font-family:var(--display);font-weight:700;font-size:2.4rem;line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
+header p{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+.eyebrow{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:.82rem;color:var(--muted);margin:0 0 8px}
+.group{display:grid;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:10px}
+.flight{appearance:none;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:0 0 8px;display:grid;gap:7px;cursor:pointer;font:inherit;overflow:hidden;transition:border-color .15s,transform .15s,box-shadow .15s}
+.flight:hover{border-color:var(--fair);transform:translateY(-1px)}
+.flight:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+.flight[aria-pressed="true"]{border-color:var(--shot);box-shadow:0 0 0 3px var(--shot-soft)}
+.flight svg{display:block;width:100%;height:auto;aspect-ratio:4/3}
+.flight span{font-family:var(--display);font-weight:600;font-size:1.05rem;line-height:1.1;text-align:center;padding:0 4px}
+.sky{fill:var(--sky)}.rough{fill:var(--rough)}.turf{fill:var(--turf)}.turf2{fill:var(--turf2)}.green{fill:var(--turf2)}
+.pole{stroke:var(--golfer);stroke-width:1;fill:none}.flagc{fill:var(--flag)}
+.ideal{stroke:var(--ideal);stroke-width:1.4;stroke-dasharray:3 3;fill:none}
+.shot{stroke:var(--shot);stroke-width:2.6;fill:none;stroke-linecap:round}
+.land{fill:#fff;stroke:var(--shot);stroke-width:1.4}
+.dirt{fill:var(--dirt)}
+.golfer{fill:var(--golfer);stroke:var(--golfer);stroke-linecap:round;stroke-linejoin:round}
+.golfer .limb{fill:none;stroke-width:2.6}.golfer .torso{fill:none;stroke-width:4.2}.golfer .arm{fill:none;stroke-width:2}.golfer .club{fill:none;stroke-width:1.2}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:22px;height:0;vertical-align:middle;margin-right:6px;border-top:3px solid var(--shot);border-radius:2px}
+.legend i.tgt{border-top:2px dashed var(--muted)}
+.diag{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:14px}
+.diag h2{font-family:var(--display);font-size:1.9rem;margin:0;line-height:1}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.fact{min-width:0}
+.fact b{display:block;font-family:var(--display);text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;color:var(--muted);font-weight:600}
+.faults{display:grid;gap:10px}
+.fault{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.fault summary{list-style:none;cursor:pointer;padding:12px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.fault summary::-webkit-details-marker{display:none}
+.fault summary:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
+.rank{font-family:var(--display);font-weight:700;font-size:1.05rem;width:2.2rem;height:2.2rem;border-radius:50%;display:grid;place-items:center;background:var(--fair-soft);color:var(--fair);font-variant-numeric:tabular-nums}
+.ft{min-width:0}
+.ft strong{display:block;line-height:1.25}
+.ft small{color:var(--muted);font-size:.85rem}
+.chev{color:var(--muted);transition:transform .2s;font-size:1.1rem}
+.fault[open] .chev{transform:rotate(90deg)}
+.body{padding:0 14px 14px;display:grid;gap:12px;border-top:1px solid var(--line);padding-top:12px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cmp div{border-radius:8px;padding:8px 10px;font-size:.92rem;min-width:0}
+.ok{background:var(--fair-soft)}
+.no{border:1.5px dashed var(--muted)}
+.cmp b,.drill b{display:block;font-family:var(--display);text-transform:uppercase;letter-spacing:.1em;font-size:.74rem;color:var(--muted)}
+.drill h3{font-family:var(--display);font-size:1.3rem;margin:2px 0 4px}
+.drill p{margin:0;font-size:.95rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.8rem;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted)}
+.chip.cue{border-color:var(--fair);color:var(--fair);font-weight:600}
+.video{font-size:.85rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+footer{color:var(--muted);font-size:.82rem}
+.view{display:grid;gap:22px}
+.view[hidden]{display:none}
+.ask{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--fair);color:var(--surface);text-decoration:none;font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:.02em;padding:12px 16px;border-radius:10px}
+.ask::before{content:"";width:18px;height:18px;flex:none;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z'/%3E%3C/svg%3E") center/contain no-repeat}
+.ask:hover{filter:brightness(1.08)}
+.ask:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+.hand{display:grid;gap:8px}
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px}
+.seg .thumb{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--fair);transition:transform .25s ease}
+.seg[data-hand="right"] .thumb{transform:translateX(100%)}
+.seg button{position:relative;z-index:1;appearance:none;border:0;background:transparent;color:var(--muted);font-family:var(--display);font-weight:600;font-size:clamp(.92rem,3.6vw,1.05rem);letter-spacing:.01em;white-space:nowrap;padding:9px 4px;border-radius:999px;cursor:pointer;transition:color .2s}
+.seg button[aria-checked="true"]{color:var(--surface)}
+.seg button:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+.mir svg.top{transform:scaleX(-1)}
+.intro{background:var(--fair);color:var(--surface);border-radius:14px;overflow:hidden;display:grid}
+.intro-media{aspect-ratio:16/9;max-height:240px;width:100%;display:grid;place-items:center;gap:6px;text-decoration:none;color:inherit;background:radial-gradient(120% 90% at 50% 40%,rgba(255,255,255,.12),transparent 70%)}
+.intro-media video{width:100%;height:100%;object-fit:cover;background:#000}
+.play{width:56px;height:56px;border-radius:50%;border:2px solid currentColor;display:grid;place-items:center;opacity:.9}
+.play::before{content:"";margin-left:5px;border-left:16px solid currentColor;border-top:10px solid transparent;border-bottom:10px solid transparent}
+.intro-media span{font-family:var(--display);font-weight:600;font-size:1.05rem;letter-spacing:.04em;opacity:.85}
+.intro-cap{padding:10px 14px;font-size:.9rem;border-top:1px solid rgba(255,255,255,.18);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.intro-cap b{font-family:var(--display);font-size:1.1rem;letter-spacing:.02em}
+a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
+@media (max-width:420px){.cmp{grid-template-columns:1fr}header h1{font-size:2rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Tsawwassen Springs Golf Academy</p>
+    <h1>What do your bad shots look like?</h1>
+    <p>Pick the miss you see most often. You'll see why it happens and the faults to check, in order.</p>
+    <div class="legend" aria-hidden="true"><span><i></i>Your shot</span><span><i class="tgt"></i>Where you aimed</span></div>
+  </header>
+
+  <section class="intro" aria-label="Intro from Bruno" id="intro"></section>
+
+  <section class="hand" aria-label="Your swing">
+    <p class="eyebrow">I swing</p>
+    <div class="seg" id="seg" role="radiogroup" aria-label="Golfer handedness" data-hand="right">
+      <span class="thumb" aria-hidden="true"></span>
+      <button type="button" role="radio" id="hand-left" aria-checked="false">Left-handed golfer</button>
+      <button type="button" role="radio" id="hand-right" aria-checked="true">Right-handed golfer</button>
+    </div>
+  </section>
+
+  <div id="v-flight" class="view">
+  <section class="group" aria-label="Direction">
+    <p class="eyebrow">Where does it go? · view from behind</p>
+    <div class="grid" id="g-dir"></div>
+  </section>
+  <section class="group" aria-label="Height">
+    <p class="eyebrow">How high does it fly? · side view</p>
+    <div class="grid" id="g-ht"></div>
+  </section>
+  <section class="group" aria-label="Contact">
+    <p class="eyebrow">How does it come off the club?</p>
+    <div class="grid" id="g-ct"></div>
+  </section>
+
+  <section class="diag" id="diag" aria-live="polite"></section>
+  <section class="faults" id="faults" aria-label="Faults to check"></section>
+  </div>
+
+  <footer>Bruno Vieira, PGA of Canada. Every fault has an acceptable range for different bodies — only fix it when it is exaggerated enough to change the ball flight. Videos are placeholders until filmed.</footer>
+</div>
+
+<script>
+const TL='<line class="tl" x1="30" y1="58" x2="30" y2="2"/>';
+const GND='<line class="gl" x1="2" y1="54" x2="58" y2="54"/>';
+const topV=d=>TL+`<path class="fp" d="${d}"/><circle class="ball" cx="30" cy="56" r="3"/>`;
+const side=d=>GND+`<path class="fp" d="${d}"/><circle class="ball" cx="6" cy="51" r="3"/>`;
+
+const FLIGHTS=[
+ {id:"slice",g:"dir",n:"Slice",icon:topV("M30 56 Q24 20 46 6"),sc:"Starts left or straight, curves hard right",why:"Path out-to-in, face open to path",f:"F06 F14 F17 F01 F12 F07 F24"},
+ {id:"pushslice",g:"dir",n:"Push-slice",icon:topV("M30 56 Q38 26 54 8"),sc:"Starts right, curves further right",why:"Face open to target and more open than an in-to-out path",f:"F01 F12 F18 F20 F24 F09"},
+ {id:"pull",g:"dir",n:"Pull",icon:topV("M30 56 L14 6"),sc:"Starts left, flies straight",why:"Path out-to-in, face square to path (closed to target)",f:"F03 F06 F17 F23"},
+ {id:"pullhook",g:"dir",n:"Pull-hook",icon:topV("M30 56 Q22 26 6 14"),sc:"Starts left, curves further left",why:"Face closed to target and closed to path",f:"F02 F13 F25 F27"},
+ {id:"push",g:"dir",n:"Push",icon:topV("M30 56 L46 6"),sc:"Starts right, flies straight",why:"Path in-to-out, face square to path (open to target)",f:"F04 F18 F20"},
+ {id:"hook",g:"dir",n:"Hook",icon:topV("M30 56 Q42 22 18 6"),sc:"Starts right or straight, curves hard left",why:"Path in-to-out, face closed to path",f:"F02 F13 F18 F21 F22 F26"},
+ {id:"high",g:"ht",n:"Too high",icon:side("M6 51 Q22 -14 40 54"),sc:"Climbs steeply, weak and short",why:"Too much dynamic loft and spin (shaft leaning back at impact)",f:"F19 F21 F22 F28"},
+ {id:"lowiron",g:"ht",n:"Too low · irons",icon:side("M6 51 Q30 30 56 48"),sc:"Low launch, knuckle-ball",why:"Too little loft: face de-lofted, ball too far back, or very steep attack",f:"F04 F13 F23"},
+ {id:"lowdriver",g:"ht",n:"Too low · driver",icon:side("M6 51 Q24 36 54 40"),sc:"Low launch, high spin, short carry",why:"Hitting down on the driver (negative angle of attack)",f:"F04 F17 F23"},
+ {id:"fat",g:"ct",n:"Fat",icon:GND+'<path class="dv" d="M14 54 Q20 61 27 54Z"/><circle class="ball" cx="36" cy="51" r="3"/><path class="fp" d="M8 30 Q14 54 22 56"/>',sc:"Hits the ground before the ball",why:"Low point is behind the ball",f:"F09 F16 F19 F21 F26"},
+ {id:"thin",g:"ct",n:"Thin / topped",icon:GND+'<circle class="ball" cx="30" cy="47" r="7"/><path class="fp" d="M6 48 L54 48"/>',sc:"Strikes the equator or low on the face",why:"Rising out of posture, or the arms shortening through impact",f:"F05 F10 F11 F20 F24"},
+ {id:"shank",g:"ct",n:"Shank",icon:topV("M30 56 L58 38"),sc:"Shoots sharply right off the hosel",why:"Hands and club move closer to the ball than at address",f:"F20 F05 F18"},
+ {id:"both",g:"dir",n:"Both ways",icon:topV("M30 56 Q22 24 8 10")+'<path class="fp" d="M30 56 Q38 24 52 10"/>',sc:"Random left and right",why:"Timing compensation: body and hands fighting each other",f:"F09 F20 F05 F21"}
+];
+
+const FAULTS={
+F01:["P1 Address","Very weak grip (0–1 knuckles)","Neutral to strong: 2–3 lead-hand knuckles visible.","Glove Logo Check","Grip and look down: 2–3 knuckles and the glove logo. Trail-hand V points between chin and trail shoulder.","Logo to the sky","FO"],
+F02:["P1 Address","Very strong grip (4 knuckles)","Strong is fine for slower or less rotational players if the ball isn't hooking.","Glove Logo Check","Rotate the lead hand until only 2–3 knuckles show; trail palm faces the target.","Trail palm to target","FO"],
+F03:["P1 Address","Ball too far forward","Irons: centre to slightly forward. Driver: inside lead heel.","Ball Position Station","Two sticks in a T. Mark spots for wedge, 7-iron and driver.","Sternum over the ball","FO"],
+F04:["P1 Address","Ball too far back","Slightly back of centre is fine for punch shots.","Ball Position Station","Two sticks in a T. Mark spots for wedge, 7-iron and driver.","Shirt logo over the ball","FO"],
+F05:["P1 Address","C-posture or S-posture","Hip hinge with a neutral spine; bend depends on height and flexibility.","Club on Spine","Club down the spine touching tailbone, shoulder blades and head. Hinge until the arms hang.","Hinge, don't bend","DTL"],
+F06:["P1 Address","Shoulders aimed well left","Feet slightly open is fine; shoulders roughly parallel to the target line.","Railroad Tracks","Stick on the target line, stick on the toe line, club across the shoulders to match.","Shoulders on the tracks","DTL"],
+F07:["P2 Shaft parallel back","Club whipped inside, face rolled open","Leading edge from matching spine angle to slightly toe-up.","Ball Push-Away","Second ball behind the clubhead. Push it straight back 12–18 in.","Chest moves the club","DTL"],
+F08:["P2 Shaft parallel back","Hands-only takeaway, club lifts outside","Club slightly outside the hands is fine if it drops into the slot later.","Extended Shaft","Choke down so the grip end touches the belly. Turn the chest to P2 — grip end stays on the belly.","Triangle and belly button together","DTL"],
+F09:["P2 Shaft parallel back","Sway past the trail foot","Some pressure shift into the trail side is normal.","Trail Hip Wall","Bag or stick just outside the trail hip. Turn back without touching it.","Turn in a barrel","FO"],
+F10:["P3 Lead arm parallel back","Flat shoulder turn / standing up","Shoulders tilt toward the ball; amount varies with flexibility.","Shoulder Plane Stick","Stick across the chest. At P3 it points at or just outside the ball.","Lead shoulder down","DTL"],
+F11:["P3 Lead arm parallel back","Lead arm collapsed","A soft lead arm is fine; width is what matters.","Lead-Arm-Only Swings","Wedge in the lead hand only. Half swings, arm extended but not locked.","Wide and long","FO"],
+F12:["P4 Top","Lead wrist badly cupped","Flat to slightly cupped; strong grips show more cup.","Stick in Glove","Short stick under the glove strap along the forearm. The wrist doesn't bend away from it at P4.","Logo to the sky","DTL"],
+F13:["P4 Top","Lead wrist very bowed (shut face)","Slight bow is fine for players who rotate hard.","Stick in Glove","Same setup. Face points slightly up, not straight at the sky.","Toe hangs to 45°","DTL"],
+F14:["P4 Top","Flying trail elbow","Some separation is fine; many tour players have it.","Towel Under Trail Arm","Towel under the trail armpit, held through P4.","Elbow points down","DTL"],
+F15:["P4 Top","Across the line / overswing","Past parallel is fine for flexible players if face and plane are OK.","3/4 Swing Hold","Swing to P4 and hold 2 s; shaft points at the target, not right of it. Hit balls with 3/4 swings.","Stop when the shoulders stop","DTL"],
+F16:["P4 Top","Reverse spine","Spine slightly away from the target at the top.","Trail Heel Pressure","Feel pressure into the trail heel at the top; head stays behind the ball.","Load the back pocket","FO"],
+F17:["P5 Lead arm parallel down","Over-the-top","Hands slightly out is OK if the path is near neutral.","Step Drill","Feet together; step the lead foot forward as the club goes back, then swing.","Step, then swing","FO"],
+F18:["P5 Lead arm parallel down","Stuck — club too far inside","A slightly in-to-out path is ideal for most.","Inside Headcover Gate","Headcover 6 in behind and inside the ball. Miss it coming down.","Trail arm in front of chest","DTL"],
+F19:["P6 Shaft parallel down","Casting / early release","Big lag isn't required; keep some angle at P6.","Pump Drill","Swing to the top, pump to waist height twice holding the hinge, hit on the third.","Pull the handle","FO"],
+F20:["P6 Shaft parallel down","Early extension","Hips move forward slightly, not toward the ball.","Chair Drill","Chair or bag touching the glutes. Trail glute stays on it through impact.","Sit back into the chair","DTL"],
+F21:["P6 Shaft parallel down","No pressure shift","Around 60–80% pressure on the lead side at impact for irons.","Trail Toe Drill","Trail foot back and up on its toe. Half swings.","Lead pocket to target","FO"],
+F22:["P7 Impact","Flip — no shaft lean","Driver: little lean is fine. Irons: hands ahead.","Impact Bag","Hit an impact bag and stop. Hands lead the clubhead; trail wrist bent back.","Hands win the race","FO"],
+F23:["P7 Impact","Head lunging ahead of the ball","Head roughly level and behind the ball for driver.","Head Behind the Ball","Stick pointing at the lead ear at address. Head doesn't pass it before impact.","See the back of the ball","FO"],
+F24:["P8 Shaft parallel through","Chicken wing","Arms soften after P8, not before.","Extension Through","Headcover under both armpits; swing to P8 with both arms long.","Throw it to the target","FO"],
+F25:["P8 Shaft parallel through","Body stalls, arms keep going","Chest roughly facing target at P8.","Belt Buckle Hold","Hit and hold P8 for 3 s, belt buckle and chest to target.","Chest beats the arms","DTL"],
+F26:["P9 Lead arm parallel through","Hanging back on the trail foot","Finish on the lead side, trail foot on its toe.","Gary Player Walk-Through","After impact, step the trail foot past the lead foot toward the target.","Walk after it","FO"],
+F27:["P9 Lead arm parallel through","Stops rotating","Belly button faces the target or left of it.","Feet Together Finish","Feet together, 3/4 swings, hold a balanced finish 3 s.","Finish facing the flag","FO"],
+F28:["P9 Lead arm parallel through","Falling back / reverse finish","Balanced finish over the lead leg.","Gary Player Walk-Through","After impact, step the trail foot past the lead foot toward the target.","Walk after it","FO"]
+};
+const CAM={FO:"Face-on camera",DTL:"Down-the-line camera"};
+
+// ---- Intro video: paste a link here when it's ready.
+// An .mp4/.webm file link plays inside the page; a YouTube or other page link opens in a new tab.
+const INTRO_VIDEO_URL="";
+
+// ---- Handedness: all text is written for a right-handed golfer; lefties get left/right swapped.
+let hand="right";
+const SWAP={left:"right",right:"left",Left:"Right",Right:"Left"};
+const lr=s=>hand==="left"?s.replace(/\b(left|right|Left|Right)\b/g,m=>SWAP[m]):s;
+
+function card(k,i,open){
+  const [pos,rawName,rawOk,drill,rawHow,cue,cam]=FAULTS[k];
+  const name=lr(rawName),ok=lr(rawOk),how=lr(rawHow);
+  return `<details class="fault"${open?" open":""}>
+    <summary><span class="rank">${i+1}</span><span class="ft"><strong>${name}</strong><small>${pos}</small></span><span class="chev" aria-hidden="true">›</span></summary>
+    <div class="body">
+      <div class="cmp"><div class="ok"><b>Acceptable</b>${ok}</div><div class="no"><b>Fix when</b>it's exaggerated enough to change the ball flight</div></div>
+      <div class="drill"><b>Drill</b><h3>${drill}</h3><p>${how}</p></div>
+      <div class="chips"><span class="chip cue">“${cue}”</span><span class="chip">${CAM[cam]}</span></div>
+      <a class="ask" href="${askLink(k,name)}" target="_blank" rel="noopener">Ask Bruno about this</a>
+      <div class="video">Drill video coming soon</div>
+    </div></details>`;
+}
+
+const WA="17788622594";
+let curFlight="",curId="slice";
+function askLink(k,name){
+  const who=hand==="left"?"I'm a left-handed golfer and ":"";
+  const miss=curFlight?`${who}my usual miss is "${curFlight}"`:`${who}I'm working on my swing`;
+  const msg=`Hi Bruno, ${miss}. The Ball Flight Finder says it could be "${name}" (${k}). Can you check? I'll send my swing video.`;
+  return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+}
+
+function render(id){
+  const fl=FLIGHTS.find(x=>x.id===id);
+  curId=id;curFlight=fl.n;
+  document.querySelectorAll(".flight").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id));
+  document.getElementById("diag").innerHTML=`
+    <h2>${fl.n}</h2>
+    <div class="facts">
+      <div class="fact"><b>What you see</b>${lr(fl.sc)}</div>
+      <div class="fact"><b>Why it happens</b>${lr(fl.why)}</div>
+    </div>`;
+  const ids=fl.f.split(" ");
+  document.getElementById("faults").innerHTML=`<p class="eyebrow">Check in this order · ${ids.length} faults</p>`+ids.map((k,i)=>card(k,i,i===0)).join("");
+  try{localStorage.setItem("bff-last",id)}catch(e){}
+}
+
+// Top-view icons (direction + shank) mirror for lefties; side views don't.
+const MIRROR=new Set(["slice","pushslice","pull","pullhook","push","hook","both","shank"]);
+// ---- Shot scenes: a little golfer, the target (dashed) and the miss (coloured line).
+const GOLFER_BACK=`<g class="golfer"><path class="limb" d="M40 88 L43.5 75 L47.5 88"/><path class="torso" d="M43.5 75 L44 64"/><circle cx="44" cy="60.5" r="3"/><path class="arm" d="M44 65 L38 60"/><path class="club" d="M38 60 L53 55"/></g>`;
+const GOLFER_SIDE=`<g class="golfer"><path class="limb" d="M10 74 L14 62 L18 74"/><path class="torso" d="M14 62 L15 51"/><circle cx="16" cy="47.5" r="3"/><path class="arm" d="M15 53 L10 47"/><path class="club" d="M10 47 L23 42"/></g>`;
+const shot=(d,x,y)=>`<path class="shot" d="${d}"/><circle class="land" cx="${x}" cy="${y}" r="2.6"/>`;
+const behind=s=>`<rect class="sky" width="120" height="24"/><rect class="rough" y="22" width="120" height="68"/><polygon class="turf" points="28,90 92,90 67,22 53,22"/><polygon class="turf2" points="50,90 70,90 61.5,22 58.5,22"/><ellipse class="green" cx="60" cy="22.5" rx="11" ry="3"/><path class="pole" d="M60 22 L60 11"/><path class="flagc" d="M60 11 L66.5 13.2 L60 15.4Z"/><path class="ideal" d="M60 82 L60 24"/>${s}${GOLFER_BACK}`;
+const sideV=(s,ideal=true)=>`<rect class="sky" width="120" height="74"/><rect class="turf" y="73" width="120" height="17"/><path class="pole" d="M108 74 L108 61"/><path class="flagc" d="M108 61 L114.5 63.2 L108 65.4Z"/>${ideal?'<path class="ideal" d="M24 73 Q66 16 104 73"/>':""}${s}${GOLFER_SIDE}`;
+const ICONS={
+ slice:behind(shot("M60 82 Q49 42 84 24",84,24)),
+ pushslice:behind(shot("M60 82 Q70 44 98 30",98,30)),
+ pull:behind(shot("M60 82 L38 26",38,26)),
+ pullhook:behind(shot("M60 82 Q51 44 22 34",22,34)),
+ push:behind(shot("M60 82 L82 26",82,26)),
+ hook:behind(shot("M60 82 Q75 42 38 24",38,24)),
+ both:behind(shot("M60 82 Q52 44 32 26",32,26)+shot("M60 82 Q68 44 88 26",88,26)),
+ high:sideV(shot("M24 73 Q40 -8 64 73",64,73)),
+ lowiron:sideV(shot("M24 73 Q60 50 100 72",100,72)),
+ lowdriver:sideV(shot("M24 73 Q50 47 86 70",86,70)),
+ fat:sideV(`<ellipse class="dirt" cx="19" cy="75.5" rx="6.5" ry="2.6"/><circle class="dirt" cx="28" cy="66" r="1.2"/><circle class="dirt" cx="31" cy="69" r="1"/><circle class="dirt" cx="25" cy="64" r=".9"/>`+shot("M24 73 Q35 60 46 73",46,73)),
+ thin:sideV(shot("M24 72 Q64 63 106 72",106,72)),
+ shank:behind(shot("M60 82 Q86 80 114 62",114,62)),
+};
+
+const grids={dir:"g-dir",ht:"g-ht",ct:"g-ct"};
+FLIGHTS.forEach(fl=>{
+  const b=document.createElement("button");
+  b.className="flight";b.type="button";b.dataset.id=fl.id;b.id="fl-"+fl.id;b.setAttribute("aria-pressed","false");
+  b.innerHTML=`<svg viewBox="0 0 120 90" aria-hidden="true"${MIRROR.has(fl.id)?' class="top"':""}>${ICONS[fl.id]}</svg><span>${fl.n}</span>`;
+  b.addEventListener("click",()=>{render(fl.id);document.getElementById("diag").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})});
+  document.getElementById(grids[fl.g]).appendChild(b);
+});
+
+function setHand(h,save){
+  hand=h;
+  document.getElementById("seg").dataset.hand=h;
+  document.getElementById("hand-left").setAttribute("aria-checked",h==="left");
+  document.getElementById("hand-right").setAttribute("aria-checked",h==="right");
+  document.querySelector(".wrap").classList.toggle("mir",h==="left");
+  render(curId);
+  if(save){try{localStorage.setItem("bff-hand",h)}catch(e){}}
+}
+document.getElementById("hand-left").addEventListener("click",()=>setHand("left",true));
+document.getElementById("hand-right").addEventListener("click",()=>setHand("right",true));
+document.getElementById("seg").addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();const h=e.key==="ArrowLeft"?"left":"right";setHand(h,true);document.getElementById("hand-"+h).focus()}
+});
+
+function renderIntro(){
+  const el=document.getElementById("intro"),u=INTRO_VIDEO_URL.trim();
+  const cap=`<div class="intro-cap"><b>Bruno — PGA of Canada golf professional</b><span>A quick hello before you start</span></div>`;
+  if(!u){el.innerHTML=`<div class="intro-media"><div class="play" aria-hidden="true"></div><span>Intro video coming soon</span></div>${cap}`;return}
+  if(/\.(mp4|webm|mov)(\?|$)/i.test(u)||u.startsWith("/_blob/")){
+    el.innerHTML=`<div class="intro-media"><video src="${u}" controls playsinline preload="metadata"></video></div>${cap}`;
+  }else{
+    el.innerHTML=`<a class="intro-media" href="${u}" target="_blank" rel="noopener"><div class="play" aria-hidden="true"></div><span>Watch Bruno's intro</span></a>${cap}`;
+  }
+}
+renderIntro();
+
+let start="slice";try{const s=localStorage.getItem("bff-last");if(s&&FLIGHTS.some(f=>f.id===s))start=s}catch(e){}
+curId=start;
+let savedHand="right";try{if(localStorage.getItem("bff-hand")==="left")savedHand="left"}catch(e){}
+setHand(savedHand,false);
+
+</script>
+
+</body>
+</html>
