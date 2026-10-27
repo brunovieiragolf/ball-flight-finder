@@ -90,6 +90,9 @@ header p{margin:6px 0 0;color:var(--muted);font-size:.95rem}
 .chip{font-size:.8rem;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted)}
 .chip.cue{border-color:var(--fair);color:var(--fair);font-weight:600}
 .video{font-size:.85rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+.dvid{display:grid;gap:6px}
+.lbl-v{margin:0;font-family:var(--display);text-transform:uppercase;letter-spacing:.1em;font-size:.74rem;color:var(--muted);font-weight:600}
+.dvid video{width:100%;max-width:340px;aspect-ratio:9/16;border-radius:12px;background:#000;justify-self:center}
 footer{color:var(--muted);font-size:.82rem}
 .view{display:grid;gap:22px}
 .view[hidden]{display:none}
@@ -183,7 +186,7 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
   </section>
   </div>
 
-  <footer>Bruno Vieira, PGA of Canada. Every fault has an acceptable range for different bodies — only fix it when it is exaggerated enough to change the ball flight. Videos are placeholders until filmed.</footer>
+  <footer>Bruno Vieira, PGA of Canada. Every fault has an acceptable range for different bodies — only fix it when it is exaggerated enough to change the ball flight. </footer>
 </div>
 
 <div class="scrim" id="scrim" hidden>
@@ -207,7 +210,7 @@ const FLIGHTS=[
  {id:"pushslice",g:"dir",n:"Push-slice",icon:topV("M30 56 Q38 26 54 8"),sc:"Starts right, curves further right",why:"Face open to target and more open than an in-to-out path",f:"F01 F12 F18 F20 F24 F09"},
  {id:"pull",g:"dir",n:"Pull",icon:topV("M30 56 L14 6"),sc:"Starts left, flies straight",why:"Path out-to-in, face square to path (closed to target)",f:"F03 F06 F17 F23"},
  {id:"pullhook",g:"dir",n:"Pull-hook",icon:topV("M30 56 Q22 26 6 14"),sc:"Starts left, curves further left",why:"Face closed to target and closed to path",f:"F02 F13 F25 F27"},
- {id:"push",g:"dir",n:"Push",icon:topV("M30 56 L46 6"),sc:"Starts right, flies straight",why:"Path in-to-out, face square to path (open to target)",f:"F04 F18 F20"},
+ {id:"push",g:"dir",n:"Push",icon:topV("M30 56 L46 6"),sc:"Starts right, flies straight",why:"Path in-to-out, face square to path (open to target)",f:"F04 F18 F20 F29"},
  {id:"hook",g:"dir",n:"Hook",icon:topV("M30 56 Q42 22 18 6"),sc:"Starts right or straight, curves hard left",why:"Path in-to-out, face closed to path",f:"F02 F13 F18 F21 F22 F26"},
  {id:"high",g:"ht",n:"Too high",icon:side("M6 51 Q22 -14 40 54"),sc:"Climbs steeply, weak and short",why:"Too much dynamic loft and spin (shaft leaning back at impact)",f:"F19 F21 F22 F28"},
  {id:"lowiron",g:"ht",n:"Too low · irons",icon:side("M6 51 Q30 30 56 48"),sc:"Low launch, knuckle-ball",why:"Too little loft: face de-lofted, ball too far back, or very steep attack",f:"F04 F13 F23"},
@@ -246,13 +249,18 @@ F24:["P8 Shaft parallel through","Chicken wing","Arms soften after P8, not befor
 F25:["P8 Shaft parallel through","Body stalls, arms keep going","Chest roughly facing target at P8.","Belt Buckle Hold","Hit and hold P8 for 3 s, belt buckle and chest to target.","Chest beats the arms","DTL"],
 F26:["P9 Lead arm parallel through","Hanging back on the trail foot","Finish on the lead side, trail foot on its toe.","Gary Player Walk-Through","After impact, step the trail foot past the lead foot toward the target.","Walk after it","FO"],
 F27:["P9 Lead arm parallel through","Stops rotating","Belly button faces the target or left of it.","Feet Together Finish","Feet together, 3/4 swings, hold a balanced finish 3 s.","Finish facing the flag","FO"],
-F28:["P9 Lead arm parallel through","Falling back / reverse finish","Balanced finish over the lead leg.","Gary Player Walk-Through","After impact, step the trail foot past the lead foot toward the target.","Walk after it","FO"]
+F28:["P9 Lead arm parallel through","Falling back / reverse finish","Balanced finish over the lead leg.","Gary Player Walk-Through","After impact, step the trail foot past the lead foot toward the target.","Walk after it","FO"],
+F29:["P7 Impact","Clubface open at impact","The body and path can be fine; the face just isn't squared at impact.","Knuckles Down","Through impact, feel your glove-hand knuckles turn down toward the ground so the face squares.","Glove knuckles down","FO"]
 };
 const CAM={FO:"Face-on camera",DTL:"Down-the-line camera"};
 
 // ---- Intro video: paste a link here when it's ready.
 // An .mp4/.webm file link plays inside the page; a YouTube or other page link opens in a new tab.
-const INTRO_VIDEO_URL="";
+const INTRO_VIDEO_URL="videos/intro.mp4";
+// Drill videos, by fault. Files live in the website's videos/ folder.
+const VIDEOS={F01:"V01",F02:"V01",F03:"V02",F04:"V02",F09:"V07",F11:"V09",F16:"V13",F17:"V14",F19:"V16",F22:"V19",F23:"V20",F24:"V21",F26:"V23",F28:"V23",F29:"NEW"};
+const vidUrl=k=>VIDEOS[k]?`videos/${VIDEOS[k].toLowerCase()}.mp4`:"";
+function vidFail(v){const box=v.closest(".dvid,.intro-media");if(box&&box.classList.contains("dvid")){box.outerHTML='<div class="video">Drill video coming soon</div>'}else if(box){box.innerHTML='<div class="play" aria-hidden="true"></div><span>Intro video coming soon</span>'}}
 
 // ---- Handedness: all text is written for a right-handed golfer; lefties get left/right swapped.
 let hand="right";
@@ -269,7 +277,7 @@ function card(k,i,open){
       <div class="drill"><b>Drill</b><h3>${drill}</h3><p>${how}</p></div>
       <div class="chips"><span class="chip cue">“${cue}”</span><span class="chip">${CAM[cam]}</span></div>
       ${member?`<a class="ask" href="${askLink(k,name)}" target="_blank" rel="noopener">Ask Bruno about this</a>`:`<button type="button" class="ask" data-k="${k}" data-name="${name.replace(/"/g,"&quot;")}">Ask Bruno about this <small>Members</small></button>`}
-      <div class="video">Drill video coming soon</div>
+      ${vidUrl(k)?`<div class="dvid"><p class="lbl-v">Watch Bruno: ${drill}</p><video src="${vidUrl(k)}" controls playsinline preload="metadata" onerror="vidFail(this)"></video></div>`:`<div class="video">Drill video coming soon</div>`}
     </div></details>`;
 }
 
@@ -365,7 +373,7 @@ function renderIntro(){
   const cap=`<div class="intro-cap"><b>Bruno — PGA of Canada golf professional</b><span>A quick hello before you start</span></div>`;
   if(!u){el.innerHTML=`<div class="intro-media"><div class="play" aria-hidden="true"></div><span>Intro video coming soon</span></div>${cap}`;return}
   if(/\.(mp4|webm|mov)(\?|$)/i.test(u)||u.startsWith("/_blob/")){
-    el.innerHTML=`<div class="intro-media"><video src="${u}" controls playsinline preload="metadata"></video></div>${cap}`;
+    el.innerHTML=`<div class="intro-media"><video src="${u}" controls playsinline preload="metadata" onerror="vidFail(this)"></video></div>${cap}`;
   }else{
     el.innerHTML=`<a class="intro-media" href="${u}" target="_blank" rel="noopener"><div class="play" aria-hidden="true"></div><span>Watch Bruno's intro</span></a>${cap}`;
   }
