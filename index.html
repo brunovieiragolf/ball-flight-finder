@@ -130,7 +130,8 @@ button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .mir svg.top{transform:scaleX(-1)}
 .intro{background:var(--fair);color:var(--surface);border-radius:14px;overflow:hidden;display:grid}
 .intro-media{aspect-ratio:16/9;max-height:240px;width:100%;display:grid;place-items:center;gap:6px;text-decoration:none;color:inherit;background:radial-gradient(120% 90% at 50% 40%,rgba(255,255,255,.12),transparent 70%)}
-.intro-media video{width:100%;height:100%;object-fit:cover;background:#000}
+.intro-media.vid{aspect-ratio:auto;max-height:none;display:flex;justify-content:center;padding:14px 14px 0;background:none}
+.intro-media.vid video{display:block;width:100%;max-width:340px;height:auto;aspect-ratio:9/16;object-fit:contain;border-radius:12px;background:#000}
 .play{width:56px;height:56px;border-radius:50%;border:2px solid currentColor;display:grid;place-items:center;opacity:.9}
 .play::before{content:"";margin-left:5px;border-left:16px solid currentColor;border-top:10px solid transparent;border-bottom:10px solid transparent}
 .intro-media span{font-family:var(--display);font-weight:600;font-size:1.05rem;letter-spacing:.04em;opacity:.85}
@@ -260,7 +261,7 @@ const INTRO_VIDEO_URL="videos/intro.mp4";
 // Drill videos, by fault. Files live in the website's videos/ folder.
 const VIDEOS={F01:"V01",F02:"V01",F03:"V02",F04:"V02",F09:"V07",F11:"V09",F16:"V13",F17:"V14",F19:"V16",F22:"V19",F23:"V20",F24:"V21",F26:"V23",F28:"V23",F29:"NEW"};
 const vidUrl=k=>VIDEOS[k]?`videos/${VIDEOS[k].toLowerCase()}.mp4`:"";
-function vidFail(v){const box=v.closest(".dvid,.intro-media");if(box&&box.classList.contains("dvid")){box.outerHTML='<div class="video">Drill video coming soon</div>'}else if(box){box.innerHTML='<div class="play" aria-hidden="true"></div><span>Intro video coming soon</span>'}}
+function vidFail(v){const box=v.closest(".dvid,.intro-media");if(box&&box.classList.contains("dvid")){box.outerHTML='<div class="video">Drill video coming soon</div>'}else if(box){box.className="intro-media";box.innerHTML='<div class="play" aria-hidden="true"></div><span>Intro video coming soon</span>'}}
 
 // ---- Handedness: all text is written for a right-handed golfer; lefties get left/right swapped.
 let hand="right";
@@ -277,7 +278,7 @@ function card(k,i,open){
       <div class="drill"><b>Drill</b><h3>${drill}</h3><p>${how}</p></div>
       <div class="chips"><span class="chip cue">“${cue}”</span><span class="chip">${CAM[cam]}</span></div>
       ${member?`<a class="ask" href="${askLink(k,name)}" target="_blank" rel="noopener">Ask Bruno about this</a>`:`<button type="button" class="ask" data-k="${k}" data-name="${name.replace(/"/g,"&quot;")}">Ask Bruno about this <small>Members</small></button>`}
-      ${vidUrl(k)?`<div class="dvid"><p class="lbl-v">Watch Bruno: ${drill}</p><video src="${vidUrl(k)}" controls playsinline preload="metadata" onerror="vidFail(this)"></video></div>`:`<div class="video">Drill video coming soon</div>`}
+      ${vidUrl(k)?`<div class="dvid"><p class="lbl-v">Watch Bruno: ${drill}</p><video src="${vidUrl(k)}" poster="${vidUrl(k).replace(/\.mp4$/,".jpg")}" controls playsinline preload="none" onerror="vidFail(this)"></video></div>`:`<div class="video">Drill video coming soon</div>`}
     </div></details>`;
 }
 
@@ -373,7 +374,7 @@ function renderIntro(){
   const cap=`<div class="intro-cap"><b>Bruno — PGA of Canada golf professional</b><span>A quick hello before you start</span></div>`;
   if(!u){el.innerHTML=`<div class="intro-media"><div class="play" aria-hidden="true"></div><span>Intro video coming soon</span></div>${cap}`;return}
   if(/\.(mp4|webm|mov)(\?|$)/i.test(u)||u.startsWith("/_blob/")){
-    el.innerHTML=`<div class="intro-media"><video src="${u}" controls playsinline preload="metadata" onerror="vidFail(this)"></video></div>${cap}`;
+    el.innerHTML=`<div class="intro-media vid"><video src="${u}" poster="${u.replace(/\.mp4$/,".jpg")}" controls playsinline preload="metadata" onerror="vidFail(this)"></video></div>${cap}`;
   }else{
     el.innerHTML=`<a class="intro-media" href="${u}" target="_blank" rel="noopener"><div class="play" aria-hidden="true"></div><span>Watch Bruno's intro</span></a>${cap}`;
   }
