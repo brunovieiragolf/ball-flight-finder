@@ -105,7 +105,12 @@ button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .coach h2{font-family:var(--display);font-size:1.9rem;line-height:1;margin:0;text-wrap:balance}
 .coach>p{margin:0;color:var(--muted)}
 .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
-.plan{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:8px;align-content:start;min-width:0}
+.plan{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0;position:relative}
+.plan a{margin-top:auto!important}
+.plan.pick{border:2px solid var(--fair)}
+.plan .tag{position:absolute;top:-11px;left:14px;background:var(--fair);color:var(--surface);font-family:var(--display);font-weight:600;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 10px;border-radius:999px}
+.plan .founding{margin:-2px 0 0;font-size:.8rem;font-weight:600;color:var(--fair)}
+.plan ul{margin-bottom:6px!important}
 .plan h3{font-family:var(--display);font-size:1.35rem;margin:0}
 .plan .price{font-family:var(--display);font-weight:700;font-size:1.6rem;line-height:1;font-variant-numeric:tabular-nums}
 .plan .price span{font-size:.95rem;font-weight:600;color:var(--muted)}
@@ -183,7 +188,7 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
     <h2 id="coach-h">Want me to look at your swing?</h2>
     <p>The Finder shows the likely cause. Coaching confirms it on your swing and keeps you on track. Monthly video coaching, cancel anytime.</p>
     <div class="plans" id="plans"></div>
-    <p class="fine">Every plan includes <b>Ask Bruno</b>: message me about any fault on WhatsApp, answered within 48 hours. Prices plus tax.</p>
+    <p class="fine">Every plan includes <b>Ask Bruno</b>: message me about any fault on WhatsApp, answered within 48 hours.<br><b>Founding member prices</b> are yours for as long as you stay a member. Prices in Canadian dollars (CAD), plus applicable tax.</p>
   </section>
   </div>
 
@@ -284,19 +289,18 @@ function card(k,i,open){
 
 const WA="17788622594";
 // ---- Coaching plans. When the Stripe payment links exist, paste each one into JOIN.
-const JOIN={basic:"",plus:"",pro:""};
+const JOIN={basic:"",plus:""};
 const PLANS=[
- {id:"basic",n:"Basic",p:39,items:["One 15-min video call a month","Ask Bruno on WhatsApp"]},
- {id:"plus",n:"Plus",p:89,items:["Two 15-min video calls a month","One swing video review between calls","Ask Bruno on WhatsApp"]},
- {id:"pro",n:"Pro",p:179,items:["A 15-min video call every week","Up to 4 swing video reviews a month","Ask Bruno on WhatsApp"]}
+ {id:"basic",n:"Basic",p:29,items:["One 15-min video call a month","Ask Bruno on WhatsApp"]},
+ {id:"plus",n:"Plus",p:49,tag:"Best value",items:["Two 15-min video calls a month","One swing video review between calls","Ask Bruno on WhatsApp"]}
 ];
 let member=false;try{member=localStorage.getItem("bff-member")==="1"}catch(e){}
 function joinLink(pl){
   if(JOIN[pl.id])return JOIN[pl.id];
-  return `https://wa.me/${WA}?text=${encodeURIComponent(`Hi Bruno, I'm interested in ${pl.n} coaching ($${pl.p}/month). How do I sign up?`)}`;
+  return `https://wa.me/${WA}?text=${encodeURIComponent(`Hi Bruno, I'm interested in ${pl.n} coaching ($${pl.p} CAD/month). How do I sign up?`)}`;
 }
 function renderPlans(){
-  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan"><h3>${pl.n}</h3><div class="price">$${pl.p}<span> / month</span></div><ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">Join ${pl.n}</a></div>`).join("");
+  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3><div class="price">$${pl.p}<span> CAD / month</span></div><p class="founding">Founding member price</p><ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">Join ${pl.n}</a></div>`).join("");
 }
 let curFlight="",curId="slice";
 function askLink(k,name){
