@@ -274,13 +274,11 @@ function card(k,i,open){
   const [pos,rawName,rawOk,drill,rawHow,cue,cam]=FAULTS[k];
   const name=lr(rawName),ok=lr(rawOk),how=lr(rawHow);
   return `<details class="fault"${open?" open":""}>
-    <summary><span class="rank">${i+1}</span><span class="ft"><strong>${name}</strong><small>${pos}</small></span><span class="chev" aria-hidden="true">›</span></summary>
+    <summary><span class="rank">${i+1}</span><span class="ft"><strong>${name}</strong></span><span class="chev" aria-hidden="true">›</span></summary>
     <div class="body">
-      <div class="cmp"><div class="ok"><b>Acceptable</b>${ok}</div><div class="no"><b>Fix when</b>it's exaggerated enough to change the ball flight</div></div>
-      <div class="drill"><b>Drill</b><h3>${drill}</h3><p>${how}</p></div>
-      <div class="chips"><span class="chip cue">“${cue}”</span><span class="chip">${CAM[cam]}</span></div>
+      <div class="drill"><b>Drill</b><h3>${drill}</h3></div>
       ${member?`<a class="ask" href="${askLink(k,name)}" target="_blank" rel="noopener">Ask Bruno about this</a>`:`<button type="button" class="ask" data-k="${k}" data-name="${name.replace(/"/g,"&quot;")}">Ask Bruno about this <small>Members</small></button>`}
-      ${vidUrl(k)?`<div class="dvid"><p class="lbl-v">Watch Bruno: ${drill}</p><video src="${vidUrl(k)}" poster="${vidUrl(k).replace(/\.mp4$/,".jpg")}" controls playsinline preload="none" onerror="vidFail(this)"></video></div>`:`<div class="video">Drill video coming soon</div>`}
+      ${vidUrl(k)?`<div class="dvid"><video src="${vidUrl(k)}" poster="${vidUrl(k).replace(/\.mp4$/,".jpg")}" controls playsinline preload="none" onerror="vidFail(this)"></video></div>`:`<div class="video">Drill video coming soon</div>`}
     </div></details>`;
 }
 
