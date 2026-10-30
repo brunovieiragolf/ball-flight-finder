@@ -259,7 +259,7 @@ const CAM={FO:"Face-on camera",DTL:"Down-the-line camera"};
 // An .mp4/.webm file link plays inside the page; a YouTube or other page link opens in a new tab.
 const INTRO_VIDEO_URL="videos/intro.mp4";
 // Drill videos, by fault. Files live in the website's videos/ folder.
-const VIDEOS={F01:"V01",F02:"V01",F03:"V02",F04:"V02",F09:"V07",F11:"V09",F16:"V13",F17:"V14",F19:"V16",F22:"V19",F23:"V20",F24:"V21",F26:"V23",F28:"V23",F29:"NEW"};
+const VIDEOS={F01:"V01",F02:"V01",F03:"V02",F04:"V02",F09:"V07",F11:"V09",F16:"V13",F17:"V14",F19:"V16",F22:"V19",F23:"V20",F24:"V21",F26:"V23",F28:"V23",F29:"NEW",F05:"V03",F06:"V04",F07:"V05",F08:"V06",F10:"V08",F12:"V10",F13:"V10",F14:"V11",F15:"V12",F18:"V15",F20:"V17",F25:"V22"};
 const vidUrl=k=>VIDEOS[k]?`videos/${VIDEOS[k].toLowerCase()}.mp4`:"";
 function vidFail(v){const box=v.closest(".dvid,.intro-media");if(box&&box.classList.contains("dvid")){box.outerHTML='<div class="video">Drill video coming soon</div>'}else if(box){box.className="intro-media";box.innerHTML='<div class="play" aria-hidden="true"></div><span>Intro video coming soon</span>'}}
 
