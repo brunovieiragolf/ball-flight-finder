@@ -355,7 +355,6 @@ function render(id){
     <h2>${fl.n}</h2>
     <div class="facts">
       <div class="fact"><b>What you see</b>${lr(fl.sc)}</div>
-      <div class="fact"><b>Why it happens</b>${lr(fl.why)}</div>
     </div>`;
   const ids=fl.f.split(" ").filter(k=>!HIDDEN.has(k));
   document.getElementById("faults").innerHTML=`<p class="eyebrow">Check in this order · ${ids.length} faults</p>`+ids.map((k,i)=>card(k,i,i===0)).join("");
