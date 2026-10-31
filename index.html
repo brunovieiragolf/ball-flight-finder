@@ -119,6 +119,13 @@ button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .plan a{margin-top:4px;text-align:center;text-decoration:none;font-family:var(--display);font-weight:600;font-size:1.1rem;border-radius:10px;padding:10px;background:var(--fair);color:var(--surface)}
 .plan a:focus-visible,.coach-link:focus-visible,.sheet button:focus-visible,.sheet a:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
 .fine{font-size:.85rem;color:var(--muted);margin:0}
+.how{display:grid;gap:10px}
+.how h3{font-family:var(--display);font-size:1.25rem;margin:0}
+.how ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;counter-reset:how}
+.how li{counter-increment:how;display:grid;grid-template-columns:auto 1fr;column-gap:10px;row-gap:2px;align-items:start;background:var(--fair-soft);border-radius:12px;padding:12px}
+.how li::before{content:counter(how);grid-row:span 2;width:28px;height:28px;border-radius:50%;background:var(--fair);color:var(--surface);display:grid;place-items:center;font-family:var(--display);font-weight:700}
+.how li b{font-size:.95rem}
+.how li span{font-size:.85rem;color:var(--muted)}
 .lesson-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--fair);color:var(--surface);text-decoration:none;border-radius:14px;padding:16px 18px;box-shadow:0 6px 18px rgba(31,78,61,.18)}
 .lesson-cta .lc-text{display:grid;gap:3px;min-width:0}
 .lesson-cta .lc-eye{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
@@ -203,6 +210,14 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
     <h2 id="coach-h">Want me to look at your swing?</h2>
     <p>The Finder shows the likely cause. Coaching confirms it on your swing and keeps you on track. Monthly video coaching, cancel anytime.</p>
     <div class="plans" id="plans"></div>
+    <div class="how" aria-labelledby="how-h">
+      <h3 id="how-h">How lessons work</h3>
+      <ol>
+        <li><b>Join Basic or Plus.</b><span>Pay securely by card. Cancel anytime.</span></li>
+        <li><b>Get your booking link.</b><span>I'll text it to you after you join.</span></li>
+        <li><b>Book your video call.</b><span>Pick a time that suits you. We meet on Zoom or WhatsApp.</span></li>
+      </ol>
+    </div>
     <p class="fine">Every plan includes <b>Ask Bruno</b>: message me about any fault on WhatsApp, answered within 48 hours.<span id="foundnote"><br><b>Founding prices are for November 2026 only.</b> Join this month and you keep your price for as long as you stay a member. From December 1, new members pay the regular price.</span><br>Prices in Canadian dollars (CAD), plus applicable tax.</p>
   </section>
   </div>
