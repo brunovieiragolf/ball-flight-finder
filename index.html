@@ -199,7 +199,7 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
   </section>
 
   <a class="lesson-cta" href="#coaching">
-    <span class="lc-text"><span class="lc-eye">Want a coach on your swing?</span><strong>Online golf lessons with Bruno</strong><span class="lc-sub" id="lc-sub">Monthly video coaching · cancel anytime</span></span>
+    <span class="lc-text"><strong>Online golf lessons with Bruno</strong></span>
     <span class="lc-btn">See plans <span aria-hidden="true">→</span></span>
   </a>
 
@@ -337,7 +337,6 @@ function joinLink(pl){
 function renderPlans(){
   document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3><div class="price">$${price(pl)}<span> CAD / month</span></div>${founding?`<p class="founding">Founding price · November 2026 only</p><p class="regular">Regular price <s>$${pl.rp} CAD / month</s></p>`:""}<ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">Join ${pl.n}</a></div>`).join("");
   const fn=document.getElementById("foundnote"); if(fn)fn.hidden=!founding;
-  const ls=document.getElementById("lc-sub"); if(ls)ls.textContent=`From $${Math.min(...PLANS.map(price))} CAD / month${founding?" · founding price, November only":""} · cancel anytime`;
 }
 let curFlight="",curId="slice";
 function askLink(k,name){
