@@ -17,6 +17,7 @@
 <meta name="theme-color" content="#1F4E3D">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231F4E3D'/%3E%3Cpath d='M32 54 Q24 26 46 12' stroke='%23E0482F' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='46' cy='12' r='5' fill='%23fff'/%3E%3C/svg%3E">
 <style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+<script data-goatcounter="https://brunogolf.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -308,7 +309,7 @@ const lr=s=>hand==="left"?s.replace(/\b(left|right|Left|Right)\b/g,m=>SWAP[m]):s
 function card(k,i,open){
   const [pos,rawName,rawOk,drill,rawHow,cue,cam]=FAULTS[k];
   const name=lr(rawName),ok=lr(rawOk),how=lr(rawHow);
-  return `<details class="fault"${open?" open":""}>
+  return `<details class="fault" data-k="${k}"${open?" open":""}>
     <summary><span class="rank">${i+1}</span><span class="ft"><strong>${name}</strong></span><span class="chev" aria-hidden="true">›</span></summary>
     <div class="body">
       <div class="drill"><b>Drill</b><h3>${drill}</h3></div>
@@ -389,7 +390,7 @@ FLIGHTS.forEach(fl=>{
   const b=document.createElement("button");
   b.className="flight";b.type="button";b.dataset.id=fl.id;b.id="fl-"+fl.id;b.setAttribute("aria-pressed","false");
   b.innerHTML=`<svg viewBox="0 0 120 90" aria-hidden="true"${MIRROR.has(fl.id)?' class="top"':""}>${ICONS[fl.id]}</svg><span>${fl.n}</span>`;
-  b.addEventListener("click",()=>{render(fl.id);document.getElementById("diag").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})});
+  b.addEventListener("click",()=>{render(fl.id);gc(`miss-${fl.id}`,`Picked miss: ${fl.n}`);document.getElementById("diag").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})});
   document.getElementById(grids[fl.g]).appendChild(b);
 });
 
@@ -444,6 +445,17 @@ curId=start;
 let savedHand="right";try{if(localStorage.getItem("bff-hand")==="left")savedHand="left"}catch(e){}
 setHand(savedHand,false);
 
+
+// ---- Visitor stats (GoatCounter: brunogolf.goatcounter.com). Counts events only, no personal data.
+function gc(path,title){try{window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:path,title:title,event:true})}catch(e){}}
+const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+document.addEventListener("toggle",e=>{const d=e.target;if(d.matches&&d.matches("details.fault")&&d.open){const k=d.dataset.k;const f=FAULTS[k];gc(`fault-${k}-${slug(f[1])}`,`Opened fault: ${f[1]} (${curFlight})`)}},true);
+document.addEventListener("play",e=>{const v=e.target;if(v.tagName!=="VIDEO"||v.dataset.counted)return;v.dataset.counted="1";const m=(v.getAttribute("src")||"").match(/([^/]+)\.mp4/);const n=m?m[1]:"video";gc(`video-${n}`,`Played video: ${n}`)},true);
+document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest("a,button");if(!a)return;
+  if(a.matches(".lesson-cta"))gc("click-see-plans","Clicked See plans");
+  else if(a.closest("#plans"))gc(`click-${slug(a.textContent)}`,`Clicked ${a.textContent.trim()}`);
+  else if(a.matches(".ask"))gc("click-ask-bruno","Clicked Ask Bruno");
+},true);
 </script>
 
 </body>
