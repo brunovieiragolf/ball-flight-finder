@@ -356,7 +356,7 @@ function render(id){
       <div class="fact"><b>What you see</b>${lr(fl.sc)}</div>
     </div>`;
   const ids=fl.f.split(" ").filter(k=>!HIDDEN.has(k));
-  document.getElementById("faults").innerHTML=`<p class="eyebrow">Check in this order · ${ids.length} faults</p>`+ids.map((k,i)=>card(k,i,i===0)).join("");
+  document.getElementById("faults").innerHTML=`<p class="eyebrow">Check in this order · ${ids.length} faults</p>`+ids.map((k,i)=>card(k,i,false)).join("");
   try{localStorage.setItem("bff-last",id)}catch(e){}
 }
 
