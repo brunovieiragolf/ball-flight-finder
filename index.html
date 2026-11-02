@@ -102,6 +102,17 @@ footer{color:var(--muted);font-size:.82rem}
 .ask:hover{filter:brightness(1.08)}
 button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .ask small{font-family:var(--body);font-weight:600;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;border-radius:99px;padding:1px 8px;opacity:.85}
+.fb{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:8px;justify-items:center;text-align:center}
+.fb h2{font-family:var(--display);font-size:1.5rem;line-height:1.05;margin:0;text-wrap:balance}
+.fb p{margin:0;color:var(--muted);font-size:.92rem}
+.fb-balls{display:flex;gap:10px;margin-top:4px}
+.fb-ball{appearance:none;border:0;padding:0;width:44px;height:44px;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 30%,#fff 0 22%,#EDEFEC 55%,#C9CEC8 100%);box-shadow:inset -3px -4px 6px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.15);position:relative;opacity:.28;transition:opacity .15s,transform .15s}
+.fb-ball::after{content:"";position:absolute;inset:0;border-radius:50%;background-image:radial-gradient(circle,rgba(0,0,0,.13) 1.2px,transparent 1.6px);background-size:7px 7px;background-position:2px 1px;-webkit-mask:radial-gradient(circle,#000 62%,transparent 64%);mask:radial-gradient(circle,#000 62%,transparent 64%)}
+.fb-ball.on{opacity:1;transform:translateY(-2px)}
+.fb-balls:hover .fb-ball{opacity:.28;transform:none}
+.fb-balls .fb-ball.hov{opacity:1;transform:translateY(-2px)}
+.fb-ball:focus-visible{outline:3px solid var(--flag);outline-offset:3px}
+@media (prefers-reduced-motion: reduce){.fb-ball{transition:none}}
 .coach{background:var(--surface);border:2px solid var(--fair);border-radius:16px;padding:18px;display:grid;gap:14px;scroll-margin-top:16px}
 .coach h2{font-family:var(--display);font-size:1.9rem;line-height:1;margin:0;text-wrap:balance}
 .coach>p{margin:0;color:var(--muted)}
@@ -220,6 +231,15 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
       </ol>
     </div>
     <p class="fine">Every plan includes <b>Ask Bruno</b>: message me about any fault on WhatsApp, answered within 48 hours.<span id="foundnote"><br><b>Founding prices are for November 2026 only.</b> Join this month and you keep your price for as long as you stay a member. From December 1, new members pay the regular price.</span><br>Prices in Canadian dollars (CAD), plus applicable tax.</p>
+  </section>
+
+  <section class="fb" id="feedback" aria-labelledby="fb-h">
+    <h2 id="fb-h">How's the Ball Flight Finder working for you?</h2>
+    <p>Tap a ball to rate it, then tell me what you'd like added.</p>
+    <div class="fb-balls" role="radiogroup" aria-label="Rate the Ball Flight Finder from 1 to 5 golf balls">
+      <button type="button" class="fb-ball" role="radio" aria-checked="false" data-r="1" aria-label="1 of 5"></button><button type="button" class="fb-ball" role="radio" aria-checked="false" data-r="2" aria-label="2 of 5"></button><button type="button" class="fb-ball" role="radio" aria-checked="false" data-r="3" aria-label="3 of 5"></button><button type="button" class="fb-ball" role="radio" aria-checked="false" data-r="4" aria-label="4 of 5"></button><button type="button" class="fb-ball" role="radio" aria-checked="false" data-r="5" aria-label="5 of 5"></button>
+    </div>
+    <p class="fb-thanks" id="fb-thanks" hidden>Thanks for the feedback!</p>
   </section>
   </div>
 
@@ -456,6 +476,25 @@ document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest
   else if(a.closest("#plans"))gc(`click-${slug(a.textContent)}`,`Clicked ${a.textContent.trim()}`);
   else if(a.matches(".ask"))gc("click-ask-bruno","Clicked Ask Bruno");
 },true);
+
+// ---- Feedback: golf-ball rating opens the Tally form (2jX72e) with the rating passed along.
+(function(){
+  const FORM="2jX72e", balls=[...document.querySelectorAll(".fb-ball")];
+  let loaded=null;
+  const loadTally=()=>loaded||(loaded=new Promise((res,rej)=>{if(window.Tally)return res();const s=document.createElement("script");s.src="https://tally.so/widgets/embed.js";s.onload=()=>res();s.onerror=rej;document.head.appendChild(s)}));
+  const paint=(n,cls)=>balls.forEach(b=>b.classList.toggle(cls,+b.dataset.r<=n));
+  balls.forEach(b=>{
+    b.addEventListener("mouseenter",()=>paint(+b.dataset.r,"hov"));
+    b.addEventListener("mouseleave",()=>paint(0,"hov"));
+    b.addEventListener("click",async()=>{
+      const r=+b.dataset.r;
+      paint(r,"on");balls.forEach(x=>x.setAttribute("aria-checked",x===b?"true":"false"));
+      gc(`feedback-rating-${r}`,`Rated the app ${r} of 5`);
+      try{await loadTally();window.Tally.openPopup(FORM,{layout:"modal",width:420,hiddenFields:{rating:r},autoClose:2500,onSubmit:()=>{document.getElementById("fb-thanks").hidden=false;gc("feedback-sent","Sent feedback")}})}
+      catch(e){window.open(`https://tally.so/r/${FORM}?rating=${r}`,"_blank","noopener")}
+    });
+  });
+})();
 </script>
 
 </body>
