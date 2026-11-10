@@ -108,6 +108,19 @@ footer{color:var(--muted);font-size:.82rem}
 .ask:hover{filter:brightness(1.08)}
 button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .ask small{font-family:var(--body);font-weight:600;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;border-radius:99px;padding:1px 8px;opacity:.85}
+.plan{background:var(--fair);color:#F5F1E6;border-radius:16px;padding:18px;display:grid;gap:10px}
+.plan h2{font-family:var(--display);font-size:1.5rem;line-height:1.05;margin:0;text-wrap:balance}
+.plan p{margin:0;font-size:.95rem;color:#D9E7DE}
+.plan form{display:grid;gap:8px;margin-top:4px}
+.plan label{font-size:.85rem;font-weight:600;color:#F5F1E6}
+.plan input[type=text],.plan input[type=email]{font:inherit;min-height:44px;box-sizing:border-box;width:100%;border:0;border-radius:10px;padding:10px 12px;background:#FFFFFF;color:#18261F}
+.plan .plan-ok{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.88rem;color:#D9E7DE;margin-top:2px}
+.plan .plan-ok input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--flag)}
+.plan button{font:inherit;font-family:var(--display);font-weight:700;font-size:1.2rem;min-height:48px;border:0;border-radius:10px;background:var(--flag);color:var(--flag-ink);cursor:pointer;margin-top:4px}
+.plan button[disabled]{opacity:.6;cursor:default}
+.plan input:focus-visible,.plan button:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+.plan .plan-msg{color:#FFD7CF;font-size:.9rem;min-height:1em}
+.plan .plan-done{font-size:1rem;color:#F5F1E6}
 .inst{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:start}
 .inst img{width:56px;height:56px;border-radius:13px}
 .inst h2{font-family:var(--display);font-size:1.35rem;line-height:1.05;margin:0;text-wrap:balance}
@@ -233,6 +246,21 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
 
   <section class="diag" id="diag" aria-live="polite"></section>
   <section class="faults" id="faults" aria-label="Faults to check"></section>
+
+  <section class="plan" id="plan" hidden aria-labelledby="plan-h">
+    <h2 id="plan-h">Get my free 7-day <span id="plan-miss">slice</span> fix plan</h2>
+    <p>One short email from me on days 1, 3, 5 and 7: your drill, a range routine, what to check on video, and how to know it's fixed.</p>
+    <form id="plan-form" novalidate>
+      <label for="plan-name">First name</label>
+      <input type="text" id="plan-name" autocomplete="given-name" maxlength="60" required>
+      <label for="plan-email">Email</label>
+      <input type="email" id="plan-email" autocomplete="email" maxlength="120" required>
+      <label class="plan-ok" for="plan-consent"><input type="checkbox" id="plan-consent" required><span>Yes, send me golf tips from Bruno by email. Unsubscribe anytime.</span></label>
+      <button type="submit" id="plan-btn">Send me the plan</button>
+      <p class="plan-msg" id="plan-msg" role="status"></p>
+    </form>
+    <p class="plan-done" id="plan-done" hidden>You're in! Your first email is on its way. If it's not in your inbox in a few minutes, check Promotions or Spam.</p>
+  </section>
 
   <section class="inst" id="install" hidden aria-labelledby="inst-h">
     <img src="icons/icon-192.png" alt="" width="56" height="56">
@@ -409,6 +437,7 @@ function render(id){
   const ids=fl.f.split(" ").filter(k=>!HIDDEN.has(k));
   document.getElementById("faults").innerHTML=`<p class="eyebrow">Check in this order · ${ids.length} faults</p>`+ids.map((k,i)=>card(k,i,false)).join("");
   try{localStorage.setItem("bff-last",id)}catch(e){}
+  if(window.planSync)window.planSync(fl,ids[0]);
 }
 
 // Top-view icons (direction + shank) mirror for lefties; side views don't.
@@ -491,6 +520,7 @@ document.getElementById("sheet-wa").addEventListener("click",()=>{
 });
 
 let start="slice";try{const s=localStorage.getItem("bff-last");if(s&&FLIGHTS.some(f=>f.id===s))start=s}catch(e){}
+try{const q=new URLSearchParams(location.search).get("miss");if(q&&FLIGHTS.some(f=>f.id===q))start=q}catch(e){}
 curId=start;
 let savedHand="right";try{if(localStorage.getItem("bff-hand")==="left")savedHand="left"}catch(e){}
 setHand(savedHand,false);
@@ -506,6 +536,36 @@ document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest
   else if(a.closest("#plans"))gc(`click-${slug(a.textContent)}`,`Clicked ${a.textContent.trim()}`);
   else if(a.matches(".ask"))gc("click-ask-bruno","Clicked Ask Bruno");
 },true);
+
+// ---- Free 7-day plan: signup box posts to MailerLite's public form address (no account key on the site).
+(function(){
+  const PLAN_LIVE=false; // switch on once the 7-day emails are approved; ?plantest=1 shows it for testing
+  const FORM_URL="https://assets.mailerlite.com/jsonp/2785148/forms/203774666767074820/subscribe";
+  const card=document.getElementById("plan"), form=document.getElementById("plan-form"), msg=document.getElementById("plan-msg"), btn=document.getElementById("plan-btn");
+  let test=false;try{test=new URLSearchParams(location.search).has("plantest")}catch(e){}
+  let cur=null;
+  window.planSync=(fl,k)=>{cur={fl,k};document.getElementById("plan-miss").textContent=fl.n.toLowerCase();if(PLAN_LIVE||test)card.hidden=false};
+  if(cur===null&&curId){const fl=FLIGHTS.find(x=>x.id===curId);const k=fl.f.split(" ").filter(x=>!HIDDEN.has(x))[0];window.planSync(fl,k)}
+  form.addEventListener("submit",async e=>{
+    e.preventDefault();msg.textContent="";
+    const name=document.getElementById("plan-name").value.trim(), email=document.getElementById("plan-email").value.trim();
+    if(!name){msg.textContent="Please add your first name.";document.getElementById("plan-name").focus();return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent="Please check your email address.";document.getElementById("plan-email").focus();return}
+    if(!document.getElementById("plan-consent").checked){msg.textContent="Please tick the box so I'm allowed to email you.";return}
+    const f=FAULTS[cur.k], fd=new FormData();
+    fd.append("fields[name]",name);fd.append("fields[email]",email);
+    fd.append("fields[miss]",cur.fl.n);fd.append("fields[cause]",f[1]);fd.append("fields[drill]",f[3]);
+    fd.append("fields[plan_link]",location.origin+location.pathname+"?miss="+cur.fl.id);
+    fd.append("ml-submit","1");fd.append("anticsrf","true");
+    btn.disabled=true;
+    let ok=false;
+    try{const r=await fetch(FORM_URL,{method:"POST",body:fd});const j=await r.json().catch(()=>({}));ok=r.ok&&j.success!==false}
+    catch(err){try{await fetch(FORM_URL,{method:"POST",body:fd,mode:"no-cors"});ok=true}catch(e2){ok=false}}
+    btn.disabled=false;
+    if(ok){form.hidden=true;document.getElementById("plan-done").hidden=false;gc(`plan-signup-${cur.fl.id}`,`Signed up for 7-day plan: ${cur.fl.n}`)}
+    else msg.textContent="That didn't go through. Check your connection and try again.";
+  });
+})();
 
 // ---- Home-screen app: register the service worker, offer "Add to home screen" once the visitor is engaged.
 (function(){
