@@ -396,7 +396,7 @@ const VIDEOS={F01:"V01",F02:"V01",F03:"V02",F04:"V02",F09:"V07",F11:"V09",F16:"V
 // Faults kept in the data but not shown until their drill videos are filmed (V18 Trail Toe, V24 Feet Together).
 const HIDDEN=new Set(["F21","F27"]);
 // Portuguese versions of drill videos live in videos/pt/. Add a code here (e.g. "V17") once its Portuguese video is uploaded.
-const PT_VIDEOS=new Set(["V17","V04","V01","V02","V03","V06"]);
+const PT_VIDEOS=new Set(["V17","V04","V01","V02","V03","V06","V07"]);
 const vidUrl=k=>VIDEOS[k]?(PT_VIDEOS.has(VIDEOS[k])?`../videos/pt/${VIDEOS[k].toLowerCase()}.mp4`:`../videos/${VIDEOS[k].toLowerCase()}.mp4`):"";
 function vidFail(v){const box=v.closest(".dvid,.intro-media");if(box&&box.classList.contains("dvid")){box.outerHTML='<div class="video">Vídeo do drill em breve</div>'}else if(box){box.className="intro-media";box.innerHTML='<div class="play" aria-hidden="true"></div><span>Vídeo de apresentação em breve</span>'}}
 
