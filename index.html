@@ -539,7 +539,7 @@ document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest
 
 // ---- Free 7-day plan: signup box posts to MailerLite's public form address (no account key on the site).
 (function(){
-  const PLAN_LIVE=false; // switch on once the 7-day emails are approved; ?plantest=1 shows it for testing
+  const PLAN_LIVE=true; // switch on once the 7-day emails are approved; ?plantest=1 shows it for testing
   const FORM_URL="https://assets.mailerlite.com/jsonp/2785148/forms/203774666767074820/subscribe";
   const card=document.getElementById("plan"), form=document.getElementById("plan-form"), msg=document.getElementById("plan-msg"), btn=document.getElementById("plan-btn");
   let test=false;try{test=new URLSearchParams(location.search).has("plantest")}catch(e){}
