@@ -112,7 +112,10 @@ button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .plan{background:var(--fair);color:#F5F1E6;border-radius:16px;padding:18px;display:grid;gap:10px}
 .plan h2{font-family:var(--display);font-size:1.5rem;line-height:1.05;margin:0;text-wrap:balance}
 .plan p{margin:0;font-size:.95rem;color:#D9E7DE}
-.plan form{display:grid;gap:8px;margin-top:4px}
+.plan form{display:grid;gap:10px;margin-top:4px}
+.plan-row{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.plan input::placeholder{color:#6B7A71}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .plan label{font-size:.85rem;font-weight:600;color:#F5F1E6}
 .plan input[type=text],.plan input[type=email]{font:inherit;min-height:44px;box-sizing:border-box;width:100%;border:0;border-radius:10px;padding:10px 12px;background:#FFFFFF;color:#18261F}
 .plan .plan-ok{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.88rem;color:#D9E7DE;margin-top:2px}
@@ -120,7 +123,8 @@ button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .plan button{font:inherit;font-family:var(--display);font-weight:700;font-size:1.2rem;min-height:48px;border:0;border-radius:10px;background:var(--flag);color:var(--flag-ink);cursor:pointer;margin-top:4px}
 .plan button[disabled]{opacity:.6;cursor:default}
 .plan input:focus-visible,.plan button:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
-.plan .plan-msg{color:#FFD7CF;font-size:.9rem;min-height:1em}
+.plan .plan-msg{color:#FFD7CF;font-size:.9rem;margin:0}
+.plan .plan-msg:empty{display:none}
 .plan .plan-done{font-size:1rem;color:#F5F1E6}
 .brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fair);min-width:0}
@@ -261,14 +265,16 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
   <section class="faults" id="faults" aria-label="Pontos a checar"></section>
 
   <section class="plan" id="plan" hidden aria-labelledby="plan-h">
-    <h2 id="plan-h">Receba grátis o meu plano de 7 dias para corrigir o seu <span id="plan-miss">slice</span></h2>
-    <p>Um e-mail curto meu nos dias 1, 3, 5 e 7: o seu drill, uma rotina para o driving range, o que conferir no vídeo e como saber que corrigiu.</p>
+    <h2 id="plan-h">Plano grátis de 7 dias: <span id="plan-miss">Slice</span></h2>
+    <p>O seu drill e um plano de treino simples, por e-mail.</p>
     <form id="plan-form" novalidate>
-      <label for="plan-name">Primeiro nome</label>
-      <input type="text" id="plan-name" autocomplete="given-name" maxlength="60" required>
-      <label for="plan-email">E-mail</label>
-      <input type="email" id="plan-email" autocomplete="email" maxlength="120" required>
-      <label class="plan-ok" for="plan-consent"><input type="checkbox" id="plan-consent" required><span>Sim, quero receber dicas de golfe do Bruno por e-mail. Posso cancelar quando quiser.</span></label>
+      <div class="plan-row">
+        <label class="sr" for="plan-name">Primeiro nome</label>
+        <input type="text" id="plan-name" autocomplete="given-name" maxlength="60" placeholder="Primeiro nome" required>
+        <label class="sr" for="plan-email">E-mail</label>
+        <input type="email" id="plan-email" autocomplete="email" maxlength="120" placeholder="E-mail" required>
+      </div>
+      <label class="plan-ok" for="plan-consent"><input type="checkbox" id="plan-consent" required><span>Quero receber dicas de golfe por e-mail. Posso cancelar quando quiser.</span></label>
       <button type="submit" id="plan-btn">Quero o plano</button>
       <p class="plan-msg" id="plan-msg" role="status"></p>
     </form>
@@ -557,7 +563,7 @@ document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest
   const card=document.getElementById("plan"), form=document.getElementById("plan-form"), msg=document.getElementById("plan-msg"), btn=document.getElementById("plan-btn");
   let test=false;try{test=new URLSearchParams(location.search).has("plantest")}catch(e){}
   let cur=null;
-  window.planSync=(fl,k)=>{cur={fl,k};document.getElementById("plan-miss").textContent=fl.n.toLowerCase();if(PLAN_LIVE||test)card.hidden=false};
+  window.planSync=(fl,k)=>{cur={fl,k};document.getElementById("plan-miss").textContent=fl.n;if(PLAN_LIVE||test)card.hidden=false};
   if(cur===null&&curId){const fl=FLIGHTS.find(x=>x.id===curId);const k=fl.f.split(" ").filter(x=>!HIDDEN.has(x))[0];window.planSync(fl,k)}
   form.addEventListener("submit",async e=>{
     e.preventDefault();msg.textContent="";
@@ -587,6 +593,8 @@ document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest
   const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
   if(standalone){try{if(!sessionStorage.getItem("bff-open")){sessionStorage.setItem("bff-open","1");gc("app-open","Opened the home-screen app")}}catch(e){}return}
   const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  const isPhone=isIOS||/android/i.test(navigator.userAgent)||matchMedia("(pointer: coarse)").matches; // computers never see the install card or button
+  if(!isPhone)return;
   let deferred=null, shown=false;
   const snoozed=()=>{try{return Date.now()-(+localStorage.getItem("bff-inst-no")||0)<14*864e5}catch(e){return false}};
   const eligible=()=>!snoozed()&&(deferred||isIOS);
