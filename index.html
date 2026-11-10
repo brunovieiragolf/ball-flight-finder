@@ -108,23 +108,23 @@ footer{color:var(--muted);font-size:.82rem}
 .ask:hover{filter:brightness(1.08)}
 button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .ask small{font-family:var(--body);font-weight:600;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;border-radius:99px;padding:1px 8px;opacity:.85}
-.plan{background:var(--fair);color:#F5F1E6;border-radius:16px;padding:18px;display:grid;gap:10px}
-.plan h2{font-family:var(--display);font-size:1.5rem;line-height:1.05;margin:0;text-wrap:balance}
-.plan p{margin:0;font-size:.95rem;color:#D9E7DE}
-.plan form{display:grid;gap:10px;margin-top:4px}
+.p7{background:var(--fair);color:#F5F1E6;border-radius:16px;padding:18px;display:grid;gap:10px}
+.p7 h2{font-family:var(--display);font-size:1.5rem;line-height:1.05;margin:0;text-wrap:balance}
+.p7 p{margin:0;font-size:.95rem;color:#D9E7DE}
+.p7 form{display:grid;gap:10px;margin-top:4px}
 .plan-row{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-.plan input::placeholder{color:#6B7A71}
+.p7 input::placeholder{color:#6B7A71}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.plan label{font-size:.85rem;font-weight:600;color:#F5F1E6}
-.plan input[type=text],.plan input[type=email]{font:inherit;min-height:44px;box-sizing:border-box;width:100%;border:0;border-radius:10px;padding:10px 12px;background:#FFFFFF;color:#18261F}
-.plan .plan-ok{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.88rem;color:#D9E7DE;margin-top:2px}
-.plan .plan-ok input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--flag)}
-.plan button{font:inherit;font-family:var(--display);font-weight:700;font-size:1.2rem;min-height:48px;border:0;border-radius:10px;background:var(--flag);color:var(--flag-ink);cursor:pointer;margin-top:4px}
-.plan button[disabled]{opacity:.6;cursor:default}
-.plan input:focus-visible,.plan button:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
-.plan .plan-msg{color:#FFD7CF;font-size:.9rem;margin:0}
-.plan .plan-msg:empty{display:none}
-.plan .plan-done{font-size:1rem;color:#F5F1E6}
+.p7 label{font-size:.85rem;font-weight:600;color:#F5F1E6}
+.p7 input[type=text],.p7 input[type=email]{font:inherit;min-height:44px;box-sizing:border-box;width:100%;border:0;border-radius:10px;padding:10px 12px;background:#FFFFFF;color:#18261F}
+.p7 .plan-ok{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.88rem;color:#D9E7DE;margin-top:2px}
+.p7 .plan-ok input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--flag)}
+.p7 button{font:inherit;font-family:var(--display);font-weight:700;font-size:1.2rem;min-height:48px;border:0;border-radius:10px;background:var(--flag);color:var(--flag-ink);cursor:pointer;margin-top:4px}
+.p7 button[disabled]{opacity:.6;cursor:default}
+.p7 input:focus-visible,.p7 button:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+.p7 .plan-msg{color:#FFD7CF;font-size:.9rem;margin:0}
+.p7 .plan-msg:empty{display:none}
+.p7 .plan-done{font-size:1rem;color:#F5F1E6}
 .brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fair);min-width:0}
 .brand-mark{width:44px;height:44px;border-radius:11px;flex:none}
@@ -263,7 +263,7 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
   <section class="diag" id="diag" aria-live="polite"></section>
   <section class="faults" id="faults" aria-label="Faults to check"></section>
 
-  <section class="plan" id="plan" hidden aria-labelledby="plan-h">
+  <section class="p7" id="plan" hidden aria-labelledby="plan-h">
     <h2 id="plan-h">Free 7-day plan: <span id="plan-miss">Slice</span></h2>
     <p>Your drill and a simple practice plan, by email.</p>
     <form id="plan-form" novalidate>
@@ -296,17 +296,17 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
 
   <section class="coach" id="coaching" aria-labelledby="coach-h">
     <h2 id="coach-h">Want me to be your golf coach?</h2>
-    <p>This app shows the likely cause of your misses and the drills to fix them. If you want extra help, I'll coach you one-on-one and make sure your swing stays on track. Cancel anytime.</p>
+    <p>This app shows the likely cause of your misses and the drills to fix them. If you want extra help, I'll coach you one-on-one and make sure your swing stays on track. Try a single lesson, or join a monthly plan and cancel anytime.</p>
     <div class="plans" id="plans"></div>
     <div class="how" aria-labelledby="how-h">
       <h3 id="how-h">How lessons work</h3>
       <ol>
-        <li><b>Join Basic or Plus.</b><span>Pay securely by card. Cancel anytime.</span></li>
+        <li><b>Book a single lesson or join a plan.</b><span>Pay securely by card. Plans cancel anytime.</span></li>
         <li><b>Get your booking link.</b></li>
         <li><b>Book your video call.</b><span>Pick a time that suits you. We meet on Zoom or WhatsApp.</span></li>
       </ol>
     </div>
-    <p class="fine">Every plan includes <b>Ask Bruno</b>: message me about any fault on WhatsApp, answered within 48 hours.<span id="foundnote"><br><b>Founding prices are for November 2026 only.</b> Join this month and you keep your price for as long as you stay a member. From December 1, new members pay the regular price.</span><br>Prices in Canadian dollars (CAD), plus applicable tax.</p>
+    <p class="fine">Basic and Plus include <b>Ask Bruno</b>: message me about any fault on WhatsApp, answered within 48 hours.<span id="foundnote"><br><b>Founding prices are for November 2026 only.</b> Join this month and you keep your plan price for as long as you stay a member. From December 1, new members pay the regular price.</span><br>Prices in Canadian dollars (CAD), plus applicable tax.</p>
   </section>
 
   <section class="fb" id="feedback" aria-labelledby="fb-h">
@@ -419,8 +419,9 @@ const WA="17788622594";
 // When the Stripe payment links exist, paste each one into JOIN (founding links f, regular links r).
 const FOUNDING_END=new Date("2026-12-01T00:00:00-08:00");
 const founding=Date.now()<FOUNDING_END.getTime();
-const JOIN={basic:{f:"https://buy.stripe.com/dRmaEW98kbIb9wNdIw97G00",r:"https://buy.stripe.com/eVq6oG0BO3bFgZf5c097G02"},plus:{f:"https://buy.stripe.com/14AeVc70c27B10hgUI97G01",r:"https://buy.stripe.com/00wbJ00BO4fJ7oF1ZO97G03"}};
+const JOIN={single:{f:"https://book.stripe.com/dRmbJ0ckw4fJfVbawk97G04",r:"https://book.stripe.com/8x2aEW70c13x7oFgUI97G05"},basic:{f:"https://buy.stripe.com/dRmaEW98kbIb9wNdIw97G00",r:"https://buy.stripe.com/eVq6oG0BO3bFgZf5c097G02"},plus:{f:"https://buy.stripe.com/14AeVc70c27B10hgUI97G01",r:"https://buy.stripe.com/00wbJ00BO4fJ7oF1ZO97G03"}};
 const PLANS=[
+ {id:"single",n:"Single Lesson",fp:39,rp:49,unit:"CAD",cta:"Book a lesson",items:["One 15-min video call","No subscription"]},
  {id:"basic",n:"Basic",fp:29,rp:39,items:["One 15-min video call a month","Ask Bruno on WhatsApp"]},
  {id:"plus",n:"Plus",fp:49,rp:69,tag:"Best value",items:["Two 15-min video calls a month","One swing video review between calls","Ask Bruno on WhatsApp"]}
 ];
@@ -432,7 +433,7 @@ function joinLink(pl){
   return `https://wa.me/${WA}?text=${encodeURIComponent(`Hi Bruno, I'm interested in ${pl.n} coaching ($${price(pl)} CAD/month${founding?", founding price":""}). How do I sign up?`)}`;
 }
 function renderPlans(){
-  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3><div class="price">$${price(pl)}<span> CAD / month</span></div>${founding?`<p class="founding">Founding price · November 2026 only</p><p class="regular">Regular price <s>$${pl.rp} CAD / month</s></p>`:""}<ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">Join ${pl.n}</a></div>`).join("");
+  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3><div class="price">$${price(pl)}<span> ${pl.unit||"CAD / month"}</span></div>${founding?`<p class="founding">Founding price · November 2026 only</p><p class="regular">Regular price <s>$${pl.rp} ${pl.unit||"CAD / month"}</s></p>`:""}<ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">${pl.cta||"Join "+pl.n}</a></div>`).join("");
   const fn=document.getElementById("foundnote"); if(fn)fn.hidden=!founding;
 }
 let curFlight="",curId="slice";

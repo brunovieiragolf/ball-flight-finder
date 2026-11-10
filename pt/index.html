@@ -109,23 +109,23 @@ footer a{color:inherit}
 .ask:hover{filter:brightness(1.08)}
 button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .ask small{font-family:var(--body);font-weight:600;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;border-radius:99px;padding:1px 8px;opacity:.85}
-.plan{background:var(--fair);color:#F5F1E6;border-radius:16px;padding:18px;display:grid;gap:10px}
-.plan h2{font-family:var(--display);font-size:1.5rem;line-height:1.05;margin:0;text-wrap:balance}
-.plan p{margin:0;font-size:.95rem;color:#D9E7DE}
-.plan form{display:grid;gap:10px;margin-top:4px}
+.p7{background:var(--fair);color:#F5F1E6;border-radius:16px;padding:18px;display:grid;gap:10px}
+.p7 h2{font-family:var(--display);font-size:1.5rem;line-height:1.05;margin:0;text-wrap:balance}
+.p7 p{margin:0;font-size:.95rem;color:#D9E7DE}
+.p7 form{display:grid;gap:10px;margin-top:4px}
 .plan-row{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-.plan input::placeholder{color:#6B7A71}
+.p7 input::placeholder{color:#6B7A71}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.plan label{font-size:.85rem;font-weight:600;color:#F5F1E6}
-.plan input[type=text],.plan input[type=email]{font:inherit;min-height:44px;box-sizing:border-box;width:100%;border:0;border-radius:10px;padding:10px 12px;background:#FFFFFF;color:#18261F}
-.plan .plan-ok{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.88rem;color:#D9E7DE;margin-top:2px}
-.plan .plan-ok input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--flag)}
-.plan button{font:inherit;font-family:var(--display);font-weight:700;font-size:1.2rem;min-height:48px;border:0;border-radius:10px;background:var(--flag);color:var(--flag-ink);cursor:pointer;margin-top:4px}
-.plan button[disabled]{opacity:.6;cursor:default}
-.plan input:focus-visible,.plan button:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
-.plan .plan-msg{color:#FFD7CF;font-size:.9rem;margin:0}
-.plan .plan-msg:empty{display:none}
-.plan .plan-done{font-size:1rem;color:#F5F1E6}
+.p7 label{font-size:.85rem;font-weight:600;color:#F5F1E6}
+.p7 input[type=text],.p7 input[type=email]{font:inherit;min-height:44px;box-sizing:border-box;width:100%;border:0;border-radius:10px;padding:10px 12px;background:#FFFFFF;color:#18261F}
+.p7 .plan-ok{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.88rem;color:#D9E7DE;margin-top:2px}
+.p7 .plan-ok input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--flag)}
+.p7 button{font:inherit;font-family:var(--display);font-weight:700;font-size:1.2rem;min-height:48px;border:0;border-radius:10px;background:var(--flag);color:var(--flag-ink);cursor:pointer;margin-top:4px}
+.p7 button[disabled]{opacity:.6;cursor:default}
+.p7 input:focus-visible,.p7 button:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+.p7 .plan-msg{color:#FFD7CF;font-size:.9rem;margin:0}
+.p7 .plan-msg:empty{display:none}
+.p7 .plan-done{font-size:1rem;color:#F5F1E6}
 .brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fair);min-width:0}
 .brand-mark{width:44px;height:44px;border-radius:11px;flex:none}
@@ -264,7 +264,7 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
   <section class="diag" id="diag" aria-live="polite"></section>
   <section class="faults" id="faults" aria-label="Pontos a checar"></section>
 
-  <section class="plan" id="plan" hidden aria-labelledby="plan-h">
+  <section class="p7" id="plan" hidden aria-labelledby="plan-h">
     <h2 id="plan-h">Plano grátis de 7 dias: <span id="plan-miss">Slice</span></h2>
     <p>O seu drill e um plano de treino simples, por e-mail.</p>
     <form id="plan-form" novalidate>
@@ -297,17 +297,17 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
 
   <section class="coach" id="coaching" aria-labelledby="coach-h">
     <h2 id="coach-h">Quer que eu seja o seu professor de golfe?</h2>
-    <p>Este app mostra a causa provável dos seus erros e os drills para corrigir. Se quiser uma ajuda extra, eu te acompanho individualmente para o seu swing ficar no caminho certo. Cancele quando quiser.</p>
+    <p>Este app mostra a causa provável dos seus erros e os drills para corrigir. Se quiser uma ajuda extra, eu te acompanho individualmente para o seu swing ficar no caminho certo. Faça uma aula avulsa, ou assine um plano mensal e cancele quando quiser.</p>
     <div class="plans" id="plans"></div>
     <div class="how" aria-labelledby="how-h">
       <h3 id="how-h">Como funcionam as aulas</h3>
       <ol>
-        <li><b>Assine o Basic ou o Plus.</b><span>Pagamento seguro com cartão. Cancele quando quiser.</span></li>
+        <li><b>Agende uma aula avulsa ou assine um plano.</b><span>Pagamento seguro com cartão. Os planos podem ser cancelados quando quiser.</span></li>
         <li><b>Receba o seu link de agendamento.</b></li>
         <li><b>Agende a sua videochamada.</b><span>Escolha o melhor horário para você. Nos falamos por Zoom ou WhatsApp.</span></li>
       </ol>
     </div>
-    <p class="fine">Todo plano inclui o <b>Pergunte ao Bruno</b>: me mande mensagem sobre qualquer ponto no WhatsApp e eu respondo em até 48 horas.<span id="foundnote"></span></p>
+    <p class="fine">Os planos Basic e Plus incluem o <b>Pergunte ao Bruno</b>: me mande mensagem sobre qualquer ponto no WhatsApp e eu respondo em até 48 horas.<span id="foundnote"></span></p>
   </section>
 
   <section class="fb" id="feedback" aria-labelledby="fb-h">
@@ -423,18 +423,19 @@ const WA="17788622594";
 // ---- Planos (Brasil). Prices and Stripe links get filled in once Bruno decides Brazilian pricing.
 // Until a plan has a price and link, its button opens WhatsApp.
 const founding=false;
-const JOIN={basic:"",plus:""};
+const JOIN={single:"",basic:"",plus:""};
 const PLANS=[
+ {id:"single",n:"Aula avulsa",p:null,cur:"R$",cta:"Quero uma aula",msg:"Oi Bruno, tenho interesse em uma aula online avulsa. Como faço para agendar?",items:["Uma videochamada de 15 min","Sem assinatura"]},
  {id:"basic",n:"Basic",p:null,cur:"R$",items:["Uma videochamada de 15 min por mês","Pergunte ao Bruno no WhatsApp"]},
  {id:"plus",n:"Plus",p:null,cur:"R$",tag:"Melhor custo-benefício",items:["Duas videochamadas de 15 min por mês","Uma análise do vídeo do seu swing entre as chamadas","Pergunte ao Bruno no WhatsApp"]}
 ];
 let member=false;try{member=localStorage.getItem("bff-member")==="1"}catch(e){}
 function joinLink(pl){
   if(JOIN[pl.id])return JOIN[pl.id];
-  return `https://wa.me/${WA}?text=${encodeURIComponent(`Oi Bruno, tenho interesse nas aulas online (plano ${pl.n}). Como faço para assinar?`)}`;
+  return `https://wa.me/${WA}?text=${encodeURIComponent(pl.msg||`Oi Bruno, tenho interesse nas aulas online (plano ${pl.n}). Como faço para assinar?`)}`;
 }
 function renderPlans(){
-  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3>${pl.p?`<div class="price">${pl.cur} ${pl.p}<span> / mês</span></div>`:`<p class="founding">Fale comigo para saber o valor</p>`}<ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">${JOIN[pl.id]?"Assinar o "+pl.n:"Quero o "+pl.n}</a></div>`).join("");
+  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3>${pl.p?`<div class="price">${pl.cur} ${pl.p}<span> / mês</span></div>`:`<p class="founding">Fale comigo para saber o valor</p>`}<ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">${pl.cta||(JOIN[pl.id]?"Assinar o "+pl.n:"Quero o "+pl.n)}</a></div>`).join("");
 }
 let curFlight="",curId="slice";
 function askLink(k,name){
