@@ -15,7 +15,13 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1F4E3D">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231F4E3D'/%3E%3Cpath d='M32 54 Q24 26 46 12' stroke='%23E0482F' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='46' cy='12' r='5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ball Flight">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
 <script data-goatcounter="https://brunogolf.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
@@ -103,6 +109,16 @@ footer a{color:inherit}
 .ask:hover{filter:brightness(1.08)}
 button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .ask small{font-family:var(--body);font-weight:600;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;border-radius:99px;padding:1px 8px;opacity:.85}
+.inst{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:start}
+.inst img{width:56px;height:56px;border-radius:13px}
+.inst h2{font-family:var(--display);font-size:1.35rem;line-height:1.05;margin:0;text-wrap:balance}
+.inst p{margin:4px 0 0;color:var(--muted);font-size:.92rem}
+.inst-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.inst-row button{font:inherit;font-family:var(--display);font-weight:600;font-size:1.1rem;border-radius:10px;padding:10px 16px;min-height:44px;cursor:pointer;border:0;background:var(--fair);color:var(--surface)}
+.inst-row .inst-no{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.inst ol{margin:12px 0 0;padding-left:20px;display:grid;gap:6px;font-size:.95rem}
+.inst ol svg{width:18px;height:18px;vertical-align:-3px}
+.inst button:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
 .fb{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:8px;justify-items:center;text-align:center}
 .fb h2{font-family:var(--display);font-size:1.5rem;line-height:1.05;margin:0;text-wrap:balance}
 .fb p{margin:0;color:var(--muted);font-size:.92rem}
@@ -218,6 +234,20 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
 
   <section class="diag" id="diag" aria-live="polite"></section>
   <section class="faults" id="faults" aria-label="Pontos a checar"></section>
+
+  <section class="inst" id="install" hidden aria-labelledby="inst-h">
+    <img src="../icons/icon-192.png" alt="" width="56" height="56">
+    <div>
+      <h2 id="inst-h">Tenha o Ball Flight Finder no seu celular</h2>
+      <p>Adicione à tela de início e abra como um app, direto no driving range.</p>
+      <div class="inst-row"><button type="button" id="inst-btn">Adicionar à tela de início</button><button type="button" class="inst-no" id="inst-no">Agora não</button></div>
+      <ol id="inst-ios" hidden>
+        <li>Toque no botão <b>Compartilhar</b> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg> na barra do Safari.</li>
+        <li>Role para baixo e toque em <b>Adicionar à Tela de Início</b>.</li>
+        <li>Toque em <b>Adicionar</b>. O ícone do Ball Flight aparece na sua tela de início.</li>
+      </ol>
+    </div>
+  </section>
 
   <section class="coach" id="coaching" aria-labelledby="coach-h">
     <h2 id="coach-h">Quer que eu seja o seu professor de golfe?</h2>
@@ -477,6 +507,32 @@ document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest
   else if(a.closest("#plans"))gc(`click-${slug(a.textContent)}`,`Clicked ${a.textContent.trim()}`);
   else if(a.matches(".ask"))gc("click-ask-bruno","Clicked Ask Bruno");
 },true);
+
+// ---- Home-screen app: register the service worker, offer "Add to home screen" once the visitor is engaged.
+(function(){
+  if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("../sw.js",{scope:"../"}).catch(()=>{}));
+  const card=document.getElementById("install"), btn=document.getElementById("inst-btn"), no=document.getElementById("inst-no"), ios=document.getElementById("inst-ios");
+  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  if(standalone){try{if(!sessionStorage.getItem("bff-open")){sessionStorage.setItem("bff-open","1");gc("app-open","Opened the home-screen app")}}catch(e){}return}
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  let deferred=null, shown=false;
+  const snoozed=()=>{try{return Date.now()-(+localStorage.getItem("bff-inst-no")||0)<14*864e5}catch(e){return false}};
+  const eligible=()=>!snoozed()&&(deferred||isIOS);
+  const show=()=>{if(shown||!eligible())return;shown=true;card.hidden=false;gc("app-card-shown","Saw Add to home screen card")};
+  addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;if(engaged)show()});
+  addEventListener("appinstalled",()=>{card.hidden=true;gc("app-installed","Installed the home-screen app")});
+  let engaged=false;try{engaged=!!localStorage.getItem("bff-seen")}catch(e){}
+  const engage=()=>{engaged=true;try{localStorage.setItem("bff-seen","1")}catch(e){}show()};
+  document.addEventListener("toggle",e=>{if(e.target.matches&&e.target.matches("details.fault")&&e.target.open)engage()},true);
+  document.addEventListener("play",e=>{if(e.target.tagName==="VIDEO")engage()},true);
+  if(engaged)setTimeout(show,1500);
+  btn.addEventListener("click",async()=>{
+    gc("click-add-to-home-screen","Clicked Add to home screen");
+    if(deferred){deferred.prompt();const r=await deferred.userChoice.catch(()=>({}));deferred=null;if(r.outcome==="accepted")card.hidden=true}
+    else{ios.hidden=false;btn.hidden=true}
+  });
+  no.addEventListener("click",()=>{try{localStorage.setItem("bff-inst-no",String(Date.now()))}catch(e){}card.hidden=true;gc("click-install-not-now","Clicked Not now on install card")});
+})();
 
 // ---- Feedback: golf-ball rating opens the Tally form (2jX72e) with the rating passed along.
 (function(){
