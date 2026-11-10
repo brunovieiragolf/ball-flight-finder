@@ -27,7 +27,7 @@
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Cinzel:wght@700&family=Cormorant+Garamond:ital,wght@1,600&family=Source+Sans+3:wght@400;600;700&display=swap">
 <style>
 /* Layout: phone-first range tool — flight picker grid on top, diagnosis + fault cards below */
 :root{
@@ -122,6 +122,14 @@ button.ask{appearance:none;border:0;width:100%;cursor:pointer}
 .plan input:focus-visible,.plan button:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
 .plan .plan-msg{color:#FFD7CF;font-size:.9rem;min-height:1em}
 .plan .plan-done{font-size:1rem;color:#F5F1E6}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fair);min-width:0}
+.brand-mark{width:44px;height:44px;border-radius:11px;flex:none}
+.brand-txt{display:grid;gap:2px;line-height:1}
+.brand-txt b{font-family:"Cinzel",Georgia,"Times New Roman",serif;font-weight:700;font-size:1.05rem;letter-spacing:.08em}
+.brand-txt i{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;font-style:italic;font-weight:600;font-size:1.1rem;color:var(--ink)}
+.app-btn{font:inherit;font-family:var(--display);font-weight:600;font-size:1.05rem;min-height:44px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--fair);background:var(--surface);color:var(--fair);cursor:pointer;flex:none}
+.app-btn:focus-visible,.brand-logo:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
 .inst{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:start}
 .inst img{width:56px;height:56px;border-radius:13px}
 .inst h2{font-family:var(--display);font-size:1.35rem;line-height:1.05;margin:0;text-wrap:balance}
@@ -205,8 +213,12 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
 </style>
 
 <div class="wrap">
-  <header>
-    <p class="eyebrow">Bruno Vieira Golf</p>
+  <header class="brand">
+    <a class="brand-logo" href="./" aria-label="Bruno Vieira Golf, início">
+      <img src="../icons/icon-192.png" alt="" width="44" height="44" class="brand-mark">
+      <span class="brand-txt"><b>BRUNO VIEIRA</b><i>Professor de Golfe</i></span>
+    </a>
+    <button type="button" class="app-btn" id="app-btn" hidden>Instalar o app</button>
   </header>
 
   <section class="intro" aria-label="Apresentação do Bruno" id="intro"></section>
@@ -579,8 +591,16 @@ document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest
   const snoozed=()=>{try{return Date.now()-(+localStorage.getItem("bff-inst-no")||0)<14*864e5}catch(e){return false}};
   const eligible=()=>!snoozed()&&(deferred||isIOS);
   const show=()=>{if(shown||!eligible())return;shown=true;card.hidden=false;gc("app-card-shown","Saw Add to home screen card")};
-  addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;if(engaged)show()});
-  addEventListener("appinstalled",()=>{card.hidden=true;gc("app-installed","Installed the home-screen app")});
+  const appBtn=document.getElementById("app-btn");
+  if(isIOS)appBtn.hidden=false;
+  addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;appBtn.hidden=false;if(engaged)show()});
+  appBtn.addEventListener("click",async()=>{
+    gc("click-get-the-app","Clicked Get the app");
+    if(deferred){deferred.prompt();const r=await deferred.userChoice.catch(()=>({}));deferred=null;if(r.outcome==="accepted"){appBtn.hidden=true;card.hidden=true}return}
+    shown=true;card.hidden=false;ios.hidden=false;btn.hidden=true;
+    card.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"center"});
+  });
+  addEventListener("appinstalled",()=>{card.hidden=true;appBtn.hidden=true;gc("app-installed","Installed the home-screen app")});
   let engaged=false;try{engaged=!!localStorage.getItem("bff-seen")}catch(e){}
   const engage=()=>{engaged=true;try{localStorage.setItem("bff-seen","1")}catch(e){}show()};
   document.addEventListener("toggle",e=>{if(e.target.matches&&e.target.matches("details.fault")&&e.target.open)engage()},true);
