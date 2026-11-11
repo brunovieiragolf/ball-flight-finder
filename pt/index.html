@@ -307,7 +307,7 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
         <li><b>Agende a sua videochamada.</b><span>Escolha o melhor horário para você. Nos falamos por Zoom ou WhatsApp.</span></li>
       </ol>
     </div>
-    <p class="fine">Os planos Basic e Plus incluem o <b>Pergunte ao Bruno</b>: me mande mensagem sobre qualquer ponto no WhatsApp e eu respondo em até 48 horas.<span id="foundnote"><br><b>Os preços de fundador valem só em novembro de 2026.</b> Assine este mês e você mantém o preço do seu plano enquanto continuar membro. A partir de 1º de dezembro, novos membros pagam o preço normal.</span><br>Preços em dólares canadenses (CAD), mais impostos aplicáveis.</p>
+    <p class="fine">Os planos Basic e Plus incluem o <b>Pergunte ao Bruno</b>: me mande mensagem sobre qualquer ponto no WhatsApp e eu respondo em até 48 horas.<span id="foundnote"><br><b>O preço especial vale só em novembro de 2026.</b> Assine este mês e você mantém o preço do seu plano enquanto continuar membro. A partir de 1º de dezembro, novos membros pagam o preço normal.</span><br>Preços em dólares canadenses (CAD), mais impostos aplicáveis.</p>
   </section>
 
   <section class="fb" id="feedback" aria-labelledby="fb-h">
@@ -437,7 +437,7 @@ function joinLink(pl){
   return `https://wa.me/${WA}?text=${encodeURIComponent(`Oi Bruno, tenho interesse no plano ${pl.n}. Como faço para assinar?`)}`;
 }
 function renderPlans(){
-  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3><div class="price">$${price(pl)}<span> ${pl.unit||"CAD / mês"}</span></div>${founding?`<p class="founding">Preço de fundador · só em novembro de 2026</p><p class="regular">Preço normal <s>$${pl.rp} ${pl.unit||"CAD / mês"}</s></p>`:""}<ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">${pl.cta||"Assinar o "+pl.n}</a></div>`).join("");
+  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3><div class="price">$${price(pl)}<span> ${pl.unit||"CAD / mês"}</span></div>${founding?`<p class="founding">Preço especial · novembro de 2026</p><p class="regular">Preço normal <s>$${pl.rp} ${pl.unit||"CAD / mês"}</s></p>`:""}<ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">${pl.cta||"Assinar o "+pl.n}</a></div>`).join("");
   const fn=document.getElementById("foundnote"); if(fn)fn.hidden=!founding;
 }
 let curFlight="",curId="slice";
