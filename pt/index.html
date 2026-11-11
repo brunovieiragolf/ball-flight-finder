@@ -307,7 +307,7 @@ a.intro-media:focus-visible{outline:3px solid var(--flag);outline-offset:-3px}
         <li><b>Agende a sua videochamada.</b><span>Escolha o melhor horário para você. Nos falamos por Zoom ou WhatsApp.</span></li>
       </ol>
     </div>
-    <p class="fine">Os planos Basic e Plus incluem o <b>Pergunte ao Bruno</b>: me mande mensagem sobre qualquer ponto no WhatsApp e eu respondo em até 48 horas.<span id="foundnote"></span></p>
+    <p class="fine">Os planos Basic e Plus incluem o <b>Pergunte ao Bruno</b>: me mande mensagem sobre qualquer ponto no WhatsApp e eu respondo em até 48 horas.<span id="foundnote"><br><b>Os preços de fundador valem só em novembro de 2026.</b> Assine este mês e você mantém o preço do seu plano enquanto continuar membro. A partir de 1º de dezembro, novos membros pagam o preço normal.</span><br>Preços em dólares canadenses (CAD), mais impostos aplicáveis.</p>
   </section>
 
   <section class="fb" id="feedback" aria-labelledby="fb-h">
@@ -420,22 +420,25 @@ function card(k,i,open){
 const WA="17788622594";
 // ---- Coaching plans. Founding prices show until FOUNDING_END, then the page switches to regular prices by itself.
 // When the Stripe payment links exist, paste each one into JOIN (founding links f, regular links r).
-// ---- Planos (Brasil). Prices and Stripe links get filled in once Bruno decides Brazilian pricing.
-// Until a plan has a price and link, its button opens WhatsApp.
-const founding=false;
-const JOIN={single:"",basic:"",plus:""};
+// ---- Planos: same prices (CAD) and Stripe links as the English site.
+const FOUNDING_END=new Date("2026-12-01T00:00:00-08:00");
+const founding=Date.now()<FOUNDING_END.getTime();
+const JOIN={single:{f:"https://book.stripe.com/dRmbJ0ckw4fJfVbawk97G04",r:"https://book.stripe.com/8x2aEW70c13x7oFgUI97G05"},basic:{f:"https://buy.stripe.com/dRmaEW98kbIb9wNdIw97G00",r:"https://buy.stripe.com/eVq6oG0BO3bFgZf5c097G02"},plus:{f:"https://buy.stripe.com/14AeVc70c27B10hgUI97G01",r:"https://buy.stripe.com/00wbJ00BO4fJ7oF1ZO97G03"}};
 const PLANS=[
- {id:"single",n:"Aula avulsa",p:null,cur:"R$",cta:"Quero uma aula",msg:"Oi Bruno, tenho interesse em uma aula online avulsa. Como faço para agendar?",items:["Uma videochamada de 15 min","Sem assinatura"]},
- {id:"basic",n:"Basic",p:null,cur:"R$",items:["Uma videochamada de 15 min por mês","Pergunte ao Bruno no WhatsApp"]},
- {id:"plus",n:"Plus",p:null,cur:"R$",tag:"Melhor custo-benefício",items:["Duas videochamadas de 15 min por mês","Uma análise do vídeo do seu swing entre as chamadas","Pergunte ao Bruno no WhatsApp"]}
+ {id:"single",n:"Aula avulsa",fp:39,rp:49,unit:"CAD",cta:"Quero uma aula",items:["Uma videochamada de 15 min","Sem assinatura"]},
+ {id:"basic",n:"Basic",fp:29,rp:39,items:["Uma videochamada de 15 min por mês","Pergunte ao Bruno no WhatsApp"]},
+ {id:"plus",n:"Plus",fp:49,rp:69,tag:"Melhor custo-benefício",items:["Duas videochamadas de 15 min por mês","Uma análise do vídeo do seu swing entre as chamadas","Pergunte ao Bruno no WhatsApp"]}
 ];
 let member=false;try{member=localStorage.getItem("bff-member")==="1"}catch(e){}
+const price=pl=>founding?pl.fp:pl.rp;
 function joinLink(pl){
-  if(JOIN[pl.id])return JOIN[pl.id];
-  return `https://wa.me/${WA}?text=${encodeURIComponent(pl.msg||`Oi Bruno, tenho interesse nas aulas online (plano ${pl.n}). Como faço para assinar?`)}`;
+  const l=JOIN[pl.id]&&JOIN[pl.id][founding?"f":"r"];
+  if(l)return l;
+  return `https://wa.me/${WA}?text=${encodeURIComponent(`Oi Bruno, tenho interesse no plano ${pl.n}. Como faço para assinar?`)}`;
 }
 function renderPlans(){
-  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3>${pl.p?`<div class="price">${pl.cur} ${pl.p}<span> / mês</span></div>`:`<p class="founding">Fale comigo para saber o valor</p>`}<ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">${pl.cta||(JOIN[pl.id]?"Assinar o "+pl.n:"Quero o "+pl.n)}</a></div>`).join("");
+  document.getElementById("plans").innerHTML=PLANS.map(pl=>`<div class="plan${pl.tag?" pick":""}">${pl.tag?`<span class="tag">${pl.tag}</span>`:""}<h3>${pl.n}</h3><div class="price">$${price(pl)}<span> ${pl.unit||"CAD / mês"}</span></div>${founding?`<p class="founding">Preço de fundador · só em novembro de 2026</p><p class="regular">Preço normal <s>$${pl.rp} ${pl.unit||"CAD / mês"}</s></p>`:""}<ul>${pl.items.map(i=>`<li>${i}</li>`).join("")}</ul><a href="${joinLink(pl)}" target="_blank" rel="noopener">${pl.cta||"Assinar o "+pl.n}</a></div>`).join("");
+  const fn=document.getElementById("foundnote"); if(fn)fn.hidden=!founding;
 }
 let curFlight="",curId="slice";
 function askLink(k,name){
