@@ -420,7 +420,7 @@ function card(k,i,open){
   return `<details class="fault" data-k="${k}"${open?" open":""}>
     <summary><span class="rank">${i+1}</span><span class="ft"><strong>${name}</strong></span><span class="chev" aria-hidden="true">›</span></summary>
     <div class="body">
-      <div class="drill"><b>Drill</b><h3>${drill}</h3><p>${how}</p><div class="chips"><span class="chip cue">Feel: ${cue}</span></div></div>
+      <div class="drill"><b>Drill</b><h3>${drill}</h3><p>${how}</p></div>
       ${member?`<a class="ask" href="${askLink(k,name)}" target="_blank" rel="noopener">Ask Bruno about this</a>`:`<button type="button" class="ask" data-k="${k}" data-name="${name.replace(/"/g,"&quot;")}">Ask Bruno about this <small>Members</small></button>`}
       ${vidUrl(k)?`<div class="dvid"><video src="${vidUrl(k)}" poster="${vidUrl(k).replace(/\.mp4$/,".jpg")}" controls playsinline preload="none" onerror="vidFail(this)"></video></div>`:`<div class="video">Drill video coming soon</div>`}
     </div></details>`;
