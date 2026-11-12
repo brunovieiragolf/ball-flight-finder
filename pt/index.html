@@ -95,7 +95,17 @@ header p{margin:6px 0 0;color:var(--muted);font-size:.95rem}
 .drill p{margin:0;font-size:.95rem}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font-size:.8rem;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted)}
-.chip.cue{border-color:var(--fair);color:var(--fair);font-weight:600}
+.chip.cue{border-color:var(--fair);color:var(--fair);font-weight:600;font-size:.95rem;padding:4px 12px}
+.drill p{margin-bottom:8px}
+.intro-mini{appearance:none;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;width:100%;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:12px 14px}
+.intro-mini .thumb{position:relative;display:block;width:72px;height:96px;border-radius:10px;overflow:hidden;background:#000;flex:none}
+.intro-mini .thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.intro-mini .thumb .play{position:absolute;inset:0;margin:auto;width:38px;height:38px;color:#fff;background:rgba(0,0,0,.35);opacity:1}
+.intro-mini .thumb .play::before{margin-left:4px;border-left-width:11px;border-top-width:7px;border-bottom-width:7px}
+.intro-mini .txt{display:grid;gap:3px;min-width:0}
+.intro-mini .txt b{font-family:var(--display);font-size:1.2rem;line-height:1.1;letter-spacing:.02em}
+.intro-mini .txt span{font-size:.9rem;opacity:.9}
+.intro-mini:focus-visible{outline:3px solid var(--flag);outline-offset:-3px;border-radius:14px}
 .video{font-size:.85rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
 .dvid{display:grid;gap:6px}
 .lbl-v{margin:0;font-family:var(--display);text-transform:uppercase;letter-spacing:.1em;font-size:.74rem;color:var(--muted);font-weight:600}
@@ -358,35 +368,35 @@ const FLIGHTS=[
 ];
 
 const FAULTS={
-F01:["P1 Address","Grip muito fraco (0–1 nó dos dedos)","Neutral to strong: 2–3 lead-hand knuckles visible.","Glove Logo Check","Grip and look down: 2–3 knuckles and the glove logo. Trail-hand V points between chin and trail shoulder.","Logo to the sky","FO"],
-F02:["P1 Address","Grip muito forte (4 nós dos dedos)","Strong is fine for slower or less rotational players if the ball isn't hooking.","Glove Logo Check","Rotate the lead hand until only 2–3 knuckles show; trail palm faces the target.","Trail palm to target","FO"],
-F03:["P1 Address","Bola muito à frente","Irons: centre to slightly forward. Driver: inside lead heel.","Ball Position Station","Two sticks in a T. Mark spots for wedge, 7-iron and driver.","Sternum over the ball","FO"],
-F04:["P1 Address","Bola muito atrás","Slightly back of centre is fine for punch shots.","Ball Position Station","Two sticks in a T. Mark spots for wedge, 7-iron and driver.","Shirt logo over the ball","FO"],
-F05:["P1 Address","Postura em C ou em S","Hip hinge with a neutral spine; bend depends on height and flexibility.","Club on Spine","Club down the spine touching tailbone, shoulder blades and head. Hinge until the arms hang.","Hinge, don't bend","DTL"],
-F06:["P1 Address","Ombros apontados muito à esquerda","Feet slightly open is fine; shoulders roughly parallel to the target line.","Railroad Tracks","Stick on the target line, stick on the toe line, club across the shoulders to match.","Shoulders on the tracks","DTL"],
-F07:["P2 Shaft parallel back","Taco puxado para dentro, face abrindo","Leading edge from matching spine angle to slightly toe-up.","Ball Push-Away","Second ball behind the clubhead. Push it straight back 12–18 in.","Chest moves the club","DTL"],
-F08:["P2 Shaft parallel back","Takeaway só com as mãos, taco sobe por fora","Club slightly outside the hands is fine if it drops into the slot later.","Extended Shaft","Choke down so the grip end touches the belly. Turn the chest to P2 — grip end stays on the belly.","Triangle and belly button together","DTL"],
-F09:["P2 Shaft parallel back","Sway: quadril passa do pé de trás","Some pressure shift into the trail side is normal.","Trail Hip Wall","Bag or stick just outside the trail hip. Turn back without touching it.","Turn in a barrel","FO"],
-F10:["P3 Lead arm parallel back","Ombros girando planos / levantando","Shoulders tilt toward the ball; amount varies with flexibility.","Shoulder Plane Stick","Stick across the chest. At P3 it points at or just outside the ball.","Lead shoulder down","DTL"],
-F11:["P3 Lead arm parallel back","Braço da frente dobrando","A soft lead arm is fine; width is what matters.","Lead-Arm-Only Swings","Wedge in the lead hand only. Half swings, arm extended but not locked.","Wide and long","FO"],
-F12:["P4 Top","Pulso da frente muito dobrado (cupped)","Flat to slightly cupped; strong grips show more cup.","Stick in Glove","Short stick under the glove strap along the forearm. The wrist doesn't bend away from it at P4.","Logo to the sky","DTL"],
-F13:["P4 Top","Pulso da frente muito arqueado (face fechada)","Slight bow is fine for players who rotate hard.","Stick in Glove","Same setup. Face points slightly up, not straight at the sky.","Toe hangs to 45°","DTL"],
-F14:["P4 Top","Cotovelo de trás voando","Some separation is fine; many tour players have it.","Towel Under Trail Arm","Towel under the trail armpit, held through P4.","Elbow points down","DTL"],
-F15:["P4 Top","Taco cruzando a linha / overswing","Past parallel is fine for flexible players if face and plane are OK.","3/4 Swing Hold","Swing to P4 and hold 2 s; shaft points at the target, not right of it. Hit balls with 3/4 swings.","Stop when the shoulders stop","DTL"],
-F16:["P4 Top","Coluna invertida (reverse spine)","Spine slightly away from the target at the top.","Trail Heel Pressure","Feel pressure into the trail heel at the top; head stays behind the ball.","Load the back pocket","FO"],
-F17:["P5 Lead arm parallel down","Over-the-top","Hands slightly out is OK if the path is near neutral.","Step Drill","Feet together; step the lead foot forward as the club goes back, then swing.","Step, then swing","FO"],
-F18:["P5 Lead arm parallel down","Preso: taco muito por dentro","A slightly in-to-out path is ideal for most.","Inside Headcover Gate","Headcover 6 in behind and inside the ball. Miss it coming down.","Trail arm in front of chest","DTL"],
-F19:["P6 Shaft parallel down","Casting / soltando cedo","Big lag isn't required; keep some angle at P6.","Pump Drill","Swing to the top, pump to waist height twice holding the hinge, hit on the third.","Pull the handle","FO"],
-F20:["P6 Shaft parallel down","Extensão precoce (early extension)","Hips move forward slightly, not toward the ball.","Chair Drill","Chair or bag touching the glutes. Trail glute stays on it through impact.","Sit back into the chair","DTL"],
-F21:["P6 Shaft parallel down","Sem transferência de peso","Around 60–80% pressure on the lead side at impact for irons.","Trail Toe Drill","Trail foot back and up on its toe. Half swings.","Lead pocket to target","FO"],
-F22:["P7 Impact","Flip: sem inclinação do shaft","Driver: little lean is fine. Irons: hands ahead.","Impact Bag","Hit an impact bag and stop. Hands lead the clubhead; trail wrist bent back.","Hands win the race","FO"],
-F23:["P7 Impact","Cabeça passando à frente da bola","Head roughly level and behind the ball for driver.","Head Behind the Ball","Stick pointing at the lead ear at address. Head doesn't pass it before impact.","See the back of the ball","FO"],
-F24:["P8 Shaft parallel through","Chicken wing","Arms soften after P8, not before.","Extension Through","Headcover under both armpits; swing to P8 with both arms long.","Throw it to the target","FO"],
-F25:["P8 Shaft parallel through","Corpo para, braços continuam","Chest roughly facing target at P8.","Belt Buckle Hold","Hit and hold P8 for 3 s, belt buckle and chest to target.","Chest beats the arms","DTL"],
-F26:["P9 Lead arm parallel through","Peso preso no pé de trás","Finish on the lead side, trail foot on its toe.","Gary Player Walk-Through","After impact, step the trail foot past the lead foot toward the target.","Walk after it","FO"],
-F27:["P9 Lead arm parallel through","Para de girar","Belly button faces the target or left of it.","Feet Together Finish","Feet together, 3/4 swings, hold a balanced finish 3 s.","Finish facing the flag","FO"],
-F28:["P9 Lead arm parallel through","Caindo para trás / reverse finish","Balanced finish over the lead leg.","Gary Player Walk-Through","After impact, step the trail foot past the lead foot toward the target.","Walk after it","FO"],
-F29:["P7 Impact","Face aberta no impacto","The body and path can be fine; the face just isn't squared at impact.","Knuckles Down","Through impact, feel your glove-hand knuckles turn down toward the ground so the face squares.","Glove knuckles down","FO"]
+F01:["P1 Address","Grip muito fraco (0–1 nó dos dedos)","Neutral to strong: 2–3 lead-hand knuckles visible.","Glove Logo Check","Faça o grip e olhe para baixo: 2 a 3 nós dos dedos e o logo da luva aparecendo. O V da mão de trás aponta entre o queixo e o ombro de trás.","Logo para o céu","FO"],
+F02:["P1 Address","Grip muito forte (4 nós dos dedos)","Strong is fine for slower or less rotational players if the ball isn't hooking.","Glove Logo Check","Gire a mão da frente até aparecerem só 2 a 3 nós dos dedos; a palma da mão de trás fica virada para o alvo.","Palma de trás para o alvo","FO"],
+F03:["P1 Address","Bola muito à frente","Irons: centre to slightly forward. Driver: inside lead heel.","Ball Position Station","Duas varetas em T. Marque a posição da bola para o wedge, o ferro 7 e o driver.","Esterno em cima da bola","FO"],
+F04:["P1 Address","Bola muito atrás","Slightly back of centre is fine for punch shots.","Ball Position Station","Duas varetas em T. Marque a posição da bola para o wedge, o ferro 7 e o driver.","Logo da camisa em cima da bola","FO"],
+F05:["P1 Address","Postura em C ou em S","Hip hinge with a neutral spine; bend depends on height and flexibility.","Club on Spine","Taco nas costas, tocando o cóccix, as escápulas e a cabeça. Incline a partir do quadril até os braços ficarem soltos.","Dobre no quadril, não nas costas","DTL"],
+F06:["P1 Address","Ombros apontados muito à esquerda","Feet slightly open is fine; shoulders roughly parallel to the target line.","Railroad Tracks","Uma vareta na linha do alvo, outra na linha dos pés, e um taco nos ombros, paralelo a elas.","Ombros nos trilhos","DTL"],
+F07:["P2 Shaft parallel back","Taco puxado para dentro, face abrindo","Leading edge from matching spine angle to slightly toe-up.","Ball Push-Away","Coloque uma segunda bola atrás da cabeça do taco. Empurre-a reto para trás, uns 30 a 45 cm.","O peito move o taco","DTL"],
+F08:["P2 Shaft parallel back","Takeaway só com as mãos, taco sobe por fora","Club slightly outside the hands is fine if it drops into the slot later.","Extended Shaft","Segure o taco mais embaixo, até a ponta do grip encostar na barriga. Gire o peito até o taco chegar à altura da cintura, com a ponta do grip sempre na barriga.","Triângulo e umbigo juntos","DTL"],
+F09:["P2 Shaft parallel back","Sway: quadril passa do pé de trás","Some pressure shift into the trail side is normal.","Trail Hip Wall","Bolsa ou vareta logo ao lado do quadril de trás. Gire sem encostar nela.","Gire dentro de um barril","FO"],
+F10:["P3 Lead arm parallel back","Ombros girando planos / levantando","Shoulders tilt toward the ball; amount varies with flexibility.","Shoulder Plane Stick","Vareta atravessada no peito. Com o braço da frente paralelo ao chão, ela aponta para a bola ou um pouco além dela.","Ombro da frente para baixo","DTL"],
+F11:["P3 Lead arm parallel back","Braço da frente dobrando","A soft lead arm is fine; width is what matters.","Lead-Arm-Only Swings","Wedge só na mão da frente. Meios swings, com o braço estendido, mas sem travar.","Largo e longo","FO"],
+F12:["P4 Top","Pulso da frente muito dobrado (cupped)","Flat to slightly cupped; strong grips show more cup.","Stick in Glove","Vareta curta presa na luva, ao longo do antebraço. No topo, o pulso não se afasta dela.","Logo para o céu","DTL"],
+F13:["P4 Top","Pulso da frente muito arqueado (face fechada)","Slight bow is fine for players who rotate hard.","Stick in Glove","Mesma montagem. A face aponta levemente para cima, não direto para o céu.","Ponta do taco a 45°","DTL"],
+F14:["P4 Top","Cotovelo de trás voando","Some separation is fine; many tour players have it.","Towel Under Trail Arm","Toalha embaixo da axila de trás, presa até o topo do swing.","Cotovelo aponta para o chão","DTL"],
+F15:["P4 Top","Taco cruzando a linha / overswing","Past parallel is fine for flexible players if face and plane are OK.","3/4 Swing Hold","Suba até o topo e segure 2 segundos; o shaft aponta para o alvo, não à direita dele. Bata bolas com swings de 3/4.","Pare quando os ombros pararem","DTL"],
+F16:["P4 Top","Coluna invertida (reverse spine)","Spine slightly away from the target at the top.","Trail Heel Pressure","Sinta a pressão no calcanhar de trás no topo; a cabeça fica atrás da bola.","Carregue o bolso de trás","FO"],
+F17:["P5 Lead arm parallel down","Over-the-top","Hands slightly out is OK if the path is near neutral.","Step Drill","Pés juntos; dê um passo com o pé da frente em direção ao alvo enquanto o taco sobe, e então faça o swing.","Passo, depois swing","FO"],
+F18:["P5 Lead arm parallel down","Preso: taco muito por dentro","A slightly in-to-out path is ideal for most.","Inside Headcover Gate","Capa de taco 15 cm atrás da bola, do lado de dentro. Desça sem encostar nela.","Braço de trás na frente do peito","DTL"],
+F19:["P6 Shaft parallel down","Casting / soltando cedo","Big lag isn't required; keep some angle at P6.","Pump Drill","Suba até o topo, desça até a altura da cintura duas vezes mantendo o ângulo dos pulsos, e bata na terceira.","Puxe o grip","FO"],
+F20:["P6 Shaft parallel down","Extensão precoce (early extension)","Hips move forward slightly, not toward the ball.","Chair Drill","Cadeira ou bolsa encostada nos glúteos. O glúteo de trás fica encostado nela até o impacto.","Sente na cadeira","DTL"],
+F21:["P6 Shaft parallel down","Sem transferência de peso","Around 60–80% pressure on the lead side at impact for irons.","Trail Toe Drill","Pé de trás recuado, apoiado na ponta. Meios swings.","Bolso da frente para o alvo","FO"],
+F22:["P7 Impact","Flip: sem inclinação do shaft","Driver: little lean is fine. Irons: hands ahead.","Impact Bag","Bata num impact bag e pare. As mãos chegam antes da cabeça do taco, com o pulso de trás dobrado para trás.","As mãos ganham a corrida","FO"],
+F23:["P7 Impact","Cabeça passando à frente da bola","Head roughly level and behind the ball for driver.","Head Behind the Ball","Vareta apontando para a orelha da frente no address. A cabeça não passa dela antes do impacto.","Veja a parte de trás da bola","FO"],
+F24:["P8 Shaft parallel through","Chicken wing","Arms soften after P8, not before.","Extension Through","Uma capa de taco embaixo de cada axila; faça o swing até a altura da cintura depois do impacto, com os dois braços estendidos.","Jogue o taco para o alvo","FO"],
+F25:["P8 Shaft parallel through","Corpo para, braços continuam","Chest roughly facing target at P8.","Belt Buckle Hold","Bata e segure 3 segundos na altura da cintura depois do impacto, com a fivela do cinto e o peito virados para o alvo.","O peito ganha dos braços","DTL"],
+F26:["P9 Lead arm parallel through","Peso preso no pé de trás","Finish on the lead side, trail foot on its toe.","Gary Player Walk-Through","Depois do impacto, dê um passo com o pé de trás, passando o pé da frente em direção ao alvo.","Ande atrás da bola","FO"],
+F27:["P9 Lead arm parallel through","Para de girar","Belly button faces the target or left of it.","Feet Together Finish","Pés juntos, swings de 3/4, segure o finish equilibrado por 3 segundos.","Termine de frente para a bandeira","FO"],
+F28:["P9 Lead arm parallel through","Caindo para trás / reverse finish","Balanced finish over the lead leg.","Gary Player Walk-Through","Depois do impacto, dê um passo com o pé de trás, passando o pé da frente em direção ao alvo.","Ande atrás da bola","FO"],
+F29:["P7 Impact","Face aberta no impacto","The body and path can be fine; the face just isn't squared at impact.","Knuckles Down","No impacto, sinta os nós dos dedos da mão da luva virando para o chão, para a face chegar reta na bola.","Nós da luva para baixo","FO"]
 };
 const CAM={FO:"Face-on camera",DTL:"Down-the-line camera"};
 
@@ -409,11 +419,11 @@ const lr=s=>hand==="left"?s.replace(/(esquerda|direita|Esquerda|Direita)/g,m=>SW
 
 function card(k,i,open){
   const [pos,rawName,rawOk,drill,rawHow,cue,cam]=FAULTS[k];
-  const name=lr(rawName),ok=lr(rawOk),how=lr(rawHow);
+  const name=lr(rawName),how=lr(rawHow);
   return `<details class="fault" data-k="${k}"${open?" open":""}>
     <summary><span class="rank">${i+1}</span><span class="ft"><strong>${name}</strong></span><span class="chev" aria-hidden="true">›</span></summary>
     <div class="body">
-      <div class="drill"><b>Drill</b><h3>${drill}</h3></div>
+      <div class="drill"><b>Drill</b><h3>${drill}</h3><p>${how}</p><div class="chips"><span class="chip cue">Sensação: ${cue}</span></div></div>
       ${member?`<a class="ask" href="${askLink(k,name)}" target="_blank" rel="noopener">Pergunte ao Bruno sobre isso</a>`:`<button type="button" class="ask" data-k="${k}" data-name="${name.replace(/"/g,"&quot;")}">Pergunte ao Bruno sobre isso <small>Assinantes</small></button>`}
       ${vidUrl(k)?`<div class="dvid"><video src="${vidUrl(k)}" poster="${vidUrl(k).replace(/\.mp4$/,".jpg")}" controls playsinline preload="none" onerror="vidFail(this)"></video></div>`:`<div class="video">Vídeo do drill em breve</div>`}
     </div></details>`;
@@ -518,7 +528,10 @@ function renderIntro(){
   const cap=`<div class="intro-cap"><b>Bruno — profissional de golfe da PGA do Canadá</b><span>Um oi rápido antes de começar</span></div>`;
   if(!u){el.innerHTML=`<div class="intro-media"><div class="play" aria-hidden="true"></div><span>Vídeo de apresentação em breve</span></div>${cap}`;return}
   if(/\.(mp4|webm|mov)(\?|$)/i.test(u)||u.startsWith("/_blob/")){
-    el.innerHTML=`<div class="intro-media vid"><video src="${u}" poster="${u.replace(/\.mp4$/,".jpg")}" controls playsinline preload="metadata" onerror="vidFail(this)"></video></div>${cap}`;
+    // Small card first, so the miss picker stays near the top; tapping it opens and plays the video in place.
+    const full=`<div class="intro-media vid"><video src="${u}" poster="${u.replace(/\.mp4$/,".jpg")}" controls playsinline preload="metadata" onerror="vidFail(this)"></video></div>${cap}`;
+    el.innerHTML=`<button type="button" class="intro-mini" aria-label="Assistir à apresentação do Bruno"><span class="thumb"><img src="${u.replace(/\.mp4$/,".jpg")}" alt="" width="72" height="96"><span class="play" aria-hidden="true"></span></span><span class="txt"><b>Bruno — profissional de golfe da PGA do Canadá</b><span>Um oi rápido antes de começar · 1 min</span></span></button>`;
+    el.querySelector(".intro-mini").addEventListener("click",()=>{el.innerHTML=full;const v=el.querySelector("video");v.focus();const p=v.play();if(p&&p.catch)p.catch(()=>{})});
   }else{
     el.innerHTML=`<a class="intro-media" href="${u}" target="_blank" rel="noopener"><div class="play" aria-hidden="true"></div><span>Assista à apresentação do Bruno</span></a>${cap}`;
   }
